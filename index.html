@@ -582,13 +582,13 @@
     els.formProduto.addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      if (!isDataSdkReady) {
+      if (!state.isDataSdkReady) {
         els.msgProduto.textContent = 'Aguarde a conexão com o sistema...';
         els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
         return;
       }
 
-      if (currentRecords.length >= 999) {
+      if (state.currentRecords.length >= 999) {
         els.msgProduto.textContent = 'Limite de 999 registros atingido!';
         els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
         return;
@@ -1270,6 +1270,7 @@
     const dataHandler = {
       onDataChanged(data) {
         state.currentRecords = data || [];
+        state.isDataSdkReady = true;
         atualizarResumo(state.currentRecords);
         atualizarRegistros(state.currentRecords);
         atualizarProdutos(state.currentRecords);
@@ -1281,11 +1282,17 @@
     };
 
     (async function initDataSdk() {
-      if (!window.dataSdk) return;
+      if (!window.dataSdk) {
+        console.error('Data SDK não disponível');
+        return;
+      }
 
       const result = await window.dataSdk.init(dataHandler);
       if (result.isOk) {
+        console.log('Data SDK inicializado com sucesso');
         state.isDataSdkReady = true;
+      } else {
+        console.error('Erro ao inicializar Data SDK:', result.error);
       }
     })();
 
@@ -1333,5 +1340,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0940c07cdf61f',t:'MTc2NTI0MjE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab09c0cd690f61f',t:'MTc2NTI0MjQ4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
