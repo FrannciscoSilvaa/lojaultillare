@@ -260,7 +260,7 @@
      <div id="aba-controle" class="max-w-6xl mx-auto space-y-4" style="display: none;">
       <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
        <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">📊 Controle Mensal de Vendas</h2>
-       <p class="texto-elegante text-sm text-gray-600 mb-4">Análise detalhada por mês com vendas, lucros e produtos</p>
+       <p class="texto-elegante text-sm text-gray-600 mb-4">An��lise detalhada por mês com vendas, lucros e produtos</p>
        <div id="lista-meses" class="space-y-4">
         <p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>
        </div>
@@ -1269,6 +1269,7 @@
     // ========== DATA SDK ==========
     const dataHandler = {
       onDataChanged(data) {
+        console.log('onDataChanged chamado com', data?.length || 0, 'registros');
         state.currentRecords = data || [];
         state.isDataSdkReady = true;
         atualizarResumo(state.currentRecords);
@@ -1281,20 +1282,34 @@
       }
     };
 
-    (async function initDataSdk() {
+    // Inicializar Data SDK quando a página carregar
+    async function initDataSdk() {
+      console.log('Iniciando Data SDK...');
+      
       if (!window.dataSdk) {
         console.error('Data SDK não disponível');
         return;
       }
 
-      const result = await window.dataSdk.init(dataHandler);
-      if (result.isOk) {
-        console.log('Data SDK inicializado com sucesso');
-        state.isDataSdkReady = true;
-      } else {
-        console.error('Erro ao inicializar Data SDK:', result.error);
+      try {
+        const result = await window.dataSdk.init(dataHandler);
+        if (result.isOk) {
+          console.log('✅ Data SDK inicializado com sucesso');
+          state.isDataSdkReady = true;
+        } else {
+          console.error('❌ Erro ao inicializar Data SDK:', result.error);
+        }
+      } catch (error) {
+        console.error('❌ Exceção ao inicializar Data SDK:', error);
       }
-    })();
+    }
+
+    // Aguardar o DOM estar pronto e inicializar
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDataSdk);
+    } else {
+      initDataSdk();
+    }
 
     // ========== ELEMENT SDK ==========
     async function applyConfig(config) {
@@ -1340,5 +1355,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab09c0cd690f61f',t:'MTc2NTI0MjQ4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0a35f449ff61f',t:'MTc2NTI0Mjc4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
