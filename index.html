@@ -557,10 +557,10 @@
 
     // ========== BOTÃO SAIR ==========
     els.btnSair.addEventListener('click', () => {
-      tipoUsuario = null;
-      carrinho = [];
-      formaPagamentoSelecionada = null;
-      produtoSelecionado = null;
+      state.tipoUsuario = null;
+      state.carrinho = [];
+      state.formaPagamentoSelecionada = null;
+      state.produtoSelecionado = null;
       atualizarCarrinho();
       els.appPrincipal.style.display = 'none';
       els.loginInicial.style.display = 'flex';
@@ -569,6 +569,12 @@
       els.msgBusca.textContent = '';
       els.msgVenda.textContent = '';
       els.resultadoBusca.style.display = 'none';
+      
+      // Resetar botões de forma de pagamento
+      document.querySelectorAll('.forma-pagamento-btn').forEach(b => {
+        b.className = 'forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all';
+      });
+      
       mostrarAba('produtos');
     });
 
@@ -1329,5 +1335,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab07bf0e66cf630',t:'MTc2NTI0MTE3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab080fdb6fcf630',t:'MTc2NTI0MTM3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
