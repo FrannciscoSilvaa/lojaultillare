@@ -13,7 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-    /* ========== RESET E BASE ========== */
     body {
       box-sizing: border-box;
     }
@@ -25,7 +24,6 @@
       width: 100%;
     }
     
-    /* ========== TIPOGRAFIA ========== */
     .logo-elegante {
       font-family: 'Playfair Display', serif;
       letter-spacing: 0.15em;
@@ -36,7 +34,6 @@
       font-family: 'Montserrat', sans-serif;
     }
     
-    /* ========== BACKGROUND GRADIENTE ========== */
     .fundo-elegante {
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
       position: relative;
@@ -72,7 +69,6 @@
       z-index: 1;
     }
     
-    /* ========== SCROLLBAR CUSTOMIZADA ========== */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -91,18 +87,33 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(59, 130, 246, 0.7);
     }
+
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
  <body class="h-full">
-  <div id="app-container" class="h-full w-full overflow-auto fundo-elegante"><!-- TELA DE LOGIN INICIAL DO SISTEMA -->
+  <div id="app-container" class="h-full w-full overflow-auto fundo-elegante"><!-- TELA DE LOGIN INICIAL -->
    <div id="login-inicial" class="h-full w-full flex items-center justify-center p-4 conteudo-principal">
     <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
      <div class="text-center mb-6">
       <div class="text-6xl mb-4">
        🏬
       </div>
-      <h1 id="nome-loja-login" class="logo-elegante text-4xl text-blue-600 mb-2">ULTILLARE</h1>
+      <h1 id="nome-loja-login" class="logo-elegante text-4xl text-blue-600 mb-2">UTILARE</h1>
       <p id="slogan-loja-login" class="texto-elegante text-sm text-gray-600 italic mb-4">Onde cada detalhe faz a diferença</p>
       <div class="h-px bg-gray-200 my-4"></div>
       <p class="texto-elegante text-sm text-gray-700 font-medium">Sistema da Empresa</p>
@@ -130,7 +141,7 @@
       <p id="msg-senha-admin-inicial" class="texto-elegante text-sm text-center mt-3"></p>
      </form>
     </div>
-   </div><!-- APLICAÇÃO PRINCIPAL (oculta inicialmente) -->
+   </div><!-- APLICAÇÃO PRINCIPAL -->
    <div id="app-principal" class="h-full w-full conteudo-principal" style="display: none;"><!-- Cabeçalho fixo -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 border-b border-gray-800 shadow-lg">
      <div class="max-w-7xl mx-auto px-4 py-3">
@@ -140,15 +151,15 @@
          🏬
         </div>
         <div>
-         <h1 id="nome-loja-header" class="logo-elegante text-blue-400 text-3xl">ULTILLARE</h1>
+         <h1 id="nome-loja-header" class="logo-elegante text-blue-400 text-3xl">UTILARE</h1>
          <p id="slogan-loja-header" class="texto-elegante text-gray-400 text-xs italic">Onde cada detalhe faz a diferença</p>
         </div>
        </div>
       </div>
-      <nav class="flex gap-2 justify-center items-center"><button id="btn-aba-produtos" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all bg-blue-600 text-white" data-aba="produtos"> 📦 Produtos </button> <button id="btn-aba-vendas" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="vendas"> 🛒 Vendas </button> <button id="btn-aba-caixa" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="caixa"> 💰 Caixa </button> <button id="btn-aba-controle" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="controle"> 📊 Controle </button> <button id="btn-sair" class="texto-elegante px-4 py-2 rounded-xl text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700 ml-4"> 🚪 Sair </button>
+      <nav class="flex gap-2 justify-center items-center flex-wrap"><button id="btn-aba-produtos" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all bg-blue-600 text-white" data-aba="produtos"> 📦 Produtos </button> <button id="btn-aba-vendas" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="vendas"> 🛒 Vendas </button> <button id="btn-aba-caixa" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="caixa"> 💰 Caixa </button> <button id="btn-aba-controle" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="controle"> 📊 Controle </button> <button id="btn-sair" class="texto-elegante px-4 py-2 rounded-xl text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700 ml-4"> 🚪 Sair </button>
       </nav>
      </div>
-    </header><!-- Conteúdo principal com padding-top para compensar header fixo -->
+    </header><!-- Conteúdo principal -->
     <main class="h-full w-full pt-32 pb-6 px-4 overflow-auto"><!-- ABA PRODUTOS -->
      <div id="aba-produtos" class="max-w-4xl mx-auto space-y-4"><!-- Cadastro de produto -->
       <section class="bg-gray-900 rounded-2xl p-5 shadow-xl border border-gray-800">
@@ -165,7 +176,7 @@
          </div>
         </div>
         <div><label for="qtd-estoque" class="texto-elegante block text-sm text-gray-300 mb-1">Quantidade em estoque</label> <input id="qtd-estoque" type="number" min="0" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div><button type="submit" id="btn-cadastrar-produto" class="texto-elegante w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"> 💾 Cadastrar produto </button>
+        </div><button type="submit" id="btn-cadastrar-produto" class="texto-elegante w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"> 💾 Cadastrar produto </button>
         <p id="msg-produto" class="texto-elegante text-sm text-center"></p>
        </form>
       </section><!-- Lista de produtos -->
@@ -174,15 +185,15 @@
         <h2 class="texto-elegante text-gray-900 text-lg font-semibold">📦 Produtos cadastrados</h2><span id="contador-produtos" class="texto-elegante text-xs text-gray-500">0 produtos</span>
        </div>
        <div id="lista-produtos" class="space-y-2 max-h-96 overflow-auto">
-        <p id="sem-produtos" class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>
+        <p class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>
        </div>
       </section>
-     </div><!-- ABA VENDAS (oculta inicialmente) -->
+     </div><!-- ABA VENDAS -->
      <div id="aba-vendas" class="max-w-6xl mx-auto space-y-4" style="display: none;">
       <div id="pdv-section" class="grid grid-cols-1 lg:grid-cols-2 gap-4"><!-- PDV - Buscar produto -->
        <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
         <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">🛒 PDV - Ponto de Venda</h2>
-        <form id="form-buscar-produto" class="mb-4"><label for="buscar-produto" class="texto-elegante block text-sm text-gray-700 mb-2">Buscar produto (nome ou código)</label>
+        <form id="form-buscar-produto" class="mb-4"><label for="buscar-produto" class="texto-elegante block text-sm text-gray-700 mb-2">Buscar produto</label>
          <div class="flex gap-2"><input id="buscar-produto" type="text" class="texto-elegante flex-1 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite o nome do produto..." required> <button type="submit" class="texto-elegante bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"> 🔍 Buscar </button>
          </div>
          <p id="msg-busca" class="texto-elegante text-xs mt-2"></p>
@@ -226,11 +237,11 @@
           </div>
          </div>
         </div>
-        <div class="space-y-2"><button id="btn-finalizar-venda" type="button" class="texto-elegante w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled> ✅ Finalizar Venda </button> <button id="btn-limpar-carrinho" type="button" class="texto-elegante w-full border border-gray-700 text-gray-400 py-2 rounded-xl font-medium hover:bg-gray-800 transition-colors"> 🗑️ Limpar Carrinho </button>
+        <div class="space-y-2"><button id="btn-finalizar-venda" type="button" class="texto-elegante w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled> ✅ Finalizar Venda </button> <button id="btn-limpar-carrinho" type="button" class="texto-elegante w-full border border-gray-700 text-gray-400 py-2 rounded-xl font-medium hover:bg-gray-800 transition-colors"> 🗑️ Limpar Carrinho </button>
         </div>
         <p id="msg-venda" class="texto-elegante text-sm text-center mt-3"></p>
        </section>
-      </div><!-- Fim PDV Section --> <!-- Resumo do mês (apenas para admin) -->
+      </div><!-- Resumo do mês (apenas para admin) -->
       <section id="resumo-mes-section" class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200" style="display: none;">
        <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">📊 Resumo do mês</h2>
        <div class="grid grid-cols-3 gap-3">
@@ -247,25 +258,25 @@
          <p id="lucro-total" class="texto-elegante text-sm font-bold text-yellow-600">R$ 0,00</p>
         </div>
        </div>
-      </section><!-- Últimos registros (apenas para admin) -->
+      </section><!-- Histórico de vendas (apenas para admin) -->
       <section id="historico-vendas-section" class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200" style="display: none;">
        <div class="flex justify-between items-center mb-4">
         <h2 class="texto-elegante text-gray-900 text-lg font-semibold">📋 Histórico de vendas</h2><span id="contador" class="texto-elegante text-xs text-gray-500">0 vendas</span>
        </div>
        <div id="lista-registros" class="space-y-2 max-h-96 overflow-auto">
-        <p id="sem-registros" class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>
+        <p class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>
        </div>
       </section>
-     </div><!-- ABA CONTROLE (oculta inicialmente) -->
+     </div><!-- ABA CONTROLE -->
      <div id="aba-controle" class="max-w-6xl mx-auto space-y-4" style="display: none;">
       <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
        <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">📊 Controle Mensal de Vendas</h2>
-       <p class="texto-elegante text-sm text-gray-600 mb-4">An��lise detalhada por mês com vendas, lucros e produtos</p>
+       <p class="texto-elegante text-sm text-gray-600 mb-4">Análise detalhada por mês com vendas, lucros e produtos</p>
        <div id="lista-meses" class="space-y-4">
-        <p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>
+        <p class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>
        </div>
       </section>
-     </div><!-- ABA CAIXA (oculta inicialmente) -->
+     </div><!-- ABA CAIXA -->
      <div id="aba-caixa" class="max-w-4xl mx-auto space-y-4" style="display: none;"><!-- Resumo do caixa -->
       <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
        <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">💰 Caixa do dia</h2>
@@ -280,13 +291,13 @@
          <p id="lucro-hoje" class="texto-elegante text-2xl font-bold text-blue-600">R$ 0,00</p>
          <p class="texto-elegante text-xs text-gray-500 mt-1">Baseado no preço de compra</p>
         </div>
-       </div><button id="btn-fechar-caixa" type="button" class="texto-elegante w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"> 🔒 Fechar caixa do dia </button>
+       </div><button id="btn-fechar-caixa" type="button" class="texto-elegante w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors flex items-center justify-center gap-2"> 🔒 Fechar caixa do dia </button>
        <p id="msg-caixa" class="texto-elegante text-sm text-center mt-3"></p>
       </section><!-- Histórico de fechamentos -->
       <section class="bg-gray-900 rounded-2xl p-5 shadow-xl border border-gray-800">
        <h2 class="texto-elegante text-white text-lg font-semibold mb-4">📅 Histórico de fechamentos</h2>
        <div id="lista-fechamentos" class="space-y-2 max-h-96 overflow-auto">
-        <p id="sem-fechamentos" class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>
+        <p class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>
        </div>
       </section>
      </div>
@@ -294,33 +305,14 @@
    </div>
   </div>
   <script>
-    /**
-     * ========================================
-     * SISTEMA UTILARE - GESTÃO EMPRESARIAL
-     * ========================================
-     * Desenvolvido por: franciscosilva
-     * Versão: 1.0.0
-     * Descrição: Sistema completo de gestão com controle de produtos,
-     *            vendas, caixa e relatórios mensais
-     * ========================================
-     */
-
     // ========== CONFIGURAÇÃO ==========
     const CONFIG = {
       SENHA_ADMIN: "marliane123",
-      LIMITE_REGISTROS: 999,
-      VERSAO: "1.0.0"
+      LIMITE_REGISTROS: 999
     };
 
     const defaultConfig = {
-      background_color: "#1e3a8a",
-      surface_color: "#111827",
-      text_color: "#ffffff",
-      primary_action_color: "#2563eb",
-      secondary_action_color: "#10b981",
-      font_family: "Montserrat",
-      font_size: 14,
-      nome_loja: "ULTILLARE",
+      nome_loja: "UTILARE",
       slogan_loja: "Onde cada detalhe faz a diferença"
     };
 
@@ -331,8 +323,7 @@
       isDataSdkReady: false,
       produtoSelecionado: null,
       carrinho: [],
-      formaPagamentoSelecionada: null,
-      subtotalCarrinho: 0
+      formaPagamentoSelecionada: null
     };
 
     // ========== ELEMENTOS DOM ==========
@@ -355,8 +346,6 @@
       abaVendas: document.getElementById('aba-vendas'),
       abaCaixa: document.getElementById('aba-caixa'),
       abaControle: document.getElementById('aba-controle'),
-      listaMeses: document.getElementById('lista-meses'),
-      semDadosControle: document.getElementById('sem-dados-controle'),
       pdvSection: document.getElementById('pdv-section'),
       btnSair: document.getElementById('btn-sair'),
       nomeLoja: document.querySelectorAll('#nome-loja-login, #nome-loja-header'),
@@ -371,7 +360,6 @@
       msgProduto: document.getElementById('msg-produto'),
       listaProdutos: document.getElementById('lista-produtos'),
       contadorProdutos: document.getElementById('contador-produtos'),
-      semProdutos: document.getElementById('sem-produtos'),
       formBuscarProduto: document.getElementById('form-buscar-produto'),
       buscarProduto: document.getElementById('buscar-produto'),
       msgBusca: document.getElementById('msg-busca'),
@@ -383,12 +371,8 @@
       btnAdicionarCarrinho: document.getElementById('btn-adicionar-carrinho'),
       listaProdutosPdv: document.getElementById('lista-produtos-pdv'),
       carrinhoItens: document.getElementById('carrinho-itens'),
-      carrinhoVazio: document.getElementById('carrinho-vazio'),
-      carrinhoSubtotal: document.getElementById('carrinho-subtotal'),
       carrinhoTotalItens: document.getElementById('carrinho-total-itens'),
       carrinhoTotalFinal: document.getElementById('carrinho-total-final'),
-      descontoInfo: document.getElementById('desconto-info'),
-      valorDesconto: document.getElementById('valor-desconto'),
       formaPagamentoSection: document.getElementById('forma-pagamento-section'),
       valorPagoSection: document.getElementById('valor-pago-section'),
       valorPago: document.getElementById('valor-pago'),
@@ -404,14 +388,13 @@
       lucroTotal: document.getElementById('lucro-total'),
       contador: document.getElementById('contador'),
       listaRegistros: document.getElementById('lista-registros'),
-      semRegistros: document.getElementById('sem-registros'),
+      listaMeses: document.getElementById('lista-meses'),
       vendasHoje: document.getElementById('vendas-hoje'),
       qtdVendasHoje: document.getElementById('qtd-vendas-hoje'),
       lucroHoje: document.getElementById('lucro-hoje'),
       btnFecharCaixa: document.getElementById('btn-fechar-caixa'),
       msgCaixa: document.getElementById('msg-caixa'),
-      listaFechamentos: document.getElementById('lista-fechamentos'),
-      semFechamentos: document.getElementById('sem-fechamentos')
+      listaFechamentos: document.getElementById('lista-fechamentos')
     };
 
     // ========== FUNÇÕES AUXILIARES ==========
@@ -438,21 +421,13 @@
         };
         element.textContent = message;
         element.className = `texto-elegante text-sm text-center mt-3 ${colors[type] || colors.info}`;
-      },
-
-      clearMessage(element, delay = 3000) {
-        setTimeout(() => {
-          element.textContent = '';
-        }, delay);
       }
     };
 
-    // ========== LOGIN INICIAL ==========
-    
+    // ========== LOGIN ==========
     els.btnAcessoFuncionaria.addEventListener('click', () => {
       state.tipoUsuario = 'funcionaria';
-      els.msgLoginInicial.textContent = '✅ Acesso autorizado! Carregando sistema...';
-      els.msgLoginInicial.className = 'texto-elegante text-sm text-center mt-4 text-green-600';
+      utils.showMessage(els.msgLoginInicial, '✅ Acesso autorizado! Carregando sistema...', 'success');
       
       setTimeout(() => {
         els.loginInicial.style.display = 'none';
@@ -474,8 +449,7 @@
       
       if (senha === CONFIG.SENHA_ADMIN) {
         state.tipoUsuario = 'admin';
-        els.msgSenhaAdminInicial.textContent = '✅ Acesso autorizado!';
-        els.msgSenhaAdminInicial.className = 'texto-elegante text-sm text-center mt-3 text-green-600';
+        utils.showMessage(els.msgSenhaAdminInicial, '✅ Acesso autorizado!', 'success');
         
         setTimeout(() => {
           els.modalSenhaAdmin.style.display = 'none';
@@ -485,8 +459,7 @@
           mostrarAba('produtos');
         }, 800);
       } else {
-        els.msgSenhaAdminInicial.textContent = '❌ Senha incorreta';
-        els.msgSenhaAdminInicial.className = 'texto-elegante text-sm text-center mt-3 text-red-600';
+        utils.showMessage(els.msgSenhaAdminInicial, '❌ Senha incorreta', 'error');
         els.senhaAdminInicial.value = '';
       }
     });
@@ -495,7 +468,7 @@
       els.modalSenhaAdmin.style.display = 'none';
     });
 
-    // ========== NAVEGAÇÃO ABAS ==========
+    // ========== NAVEGAÇÃO ==========
     function mostrarAba(aba) {
       document.querySelectorAll('.aba-btn').forEach(btn => {
         if (btn.dataset.aba === aba) {
@@ -514,13 +487,11 @@
         els.abaProdutos.style.display = 'block';
       } else if (aba === 'vendas') {
         els.abaVendas.style.display = 'block';
-        // Admin vê apenas resumo e histórico (sem PDV)
         if (state.tipoUsuario === 'admin') {
           els.pdvSection.style.display = 'none';
           els.resumoMesSection.style.display = 'block';
           els.historicoVendasSection.style.display = 'block';
         } else {
-          // Funcionária vê apenas PDV
           els.pdvSection.style.display = 'grid';
           els.resumoMesSection.style.display = 'none';
           els.historicoVendasSection.style.display = 'none';
@@ -536,13 +507,11 @@
 
     function atualizarVisibilidadeAbas() {
       if (state.tipoUsuario === 'admin') {
-        // Admin: Produtos, Vendas (histórico), Caixa, Controle
         els.btnAbaProdutos.style.display = 'inline-block';
         els.btnAbaVendas.style.display = 'inline-block';
         els.btnAbaCaixa.style.display = 'inline-block';
         els.btnAbaControle.style.display = 'inline-block';
       } else if (state.tipoUsuario === 'funcionaria') {
-        // Funcionária: Apenas Vendas (PDV)
         els.btnAbaProdutos.style.display = 'none';
         els.btnAbaVendas.style.display = 'inline-block';
         els.btnAbaCaixa.style.display = 'none';
@@ -555,7 +524,6 @@
     els.btnAbaCaixa.addEventListener('click', () => mostrarAba('caixa'));
     els.btnAbaControle.addEventListener('click', () => mostrarAba('controle'));
 
-    // ========== BOTÃO SAIR ==========
     els.btnSair.addEventListener('click', () => {
       state.tipoUsuario = null;
       state.carrinho = [];
@@ -570,7 +538,6 @@
       els.msgVenda.textContent = '';
       els.resultadoBusca.style.display = 'none';
       
-      // Resetar botões de forma de pagamento
       document.querySelectorAll('.forma-pagamento-btn').forEach(b => {
         b.className = 'forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all';
       });
@@ -578,26 +545,24 @@
       mostrarAba('produtos');
     });
 
-    // ========== FORMULÁRIO CADASTRO PRODUTO ==========
+    // ========== CADASTRO PRODUTO ==========
     els.formProduto.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       if (!state.isDataSdkReady) {
-        els.msgProduto.textContent = 'Aguarde a conexão com o sistema...';
-        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+        utils.showMessage(els.msgProduto, '⏳ Aguarde a conexão com o sistema...', 'warning');
         return;
       }
 
-      if (state.currentRecords.length >= 999) {
-        els.msgProduto.textContent = 'Limite de 999 registros atingido!';
-        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+      if (state.currentRecords.length >= CONFIG.LIMITE_REGISTROS) {
+        utils.showMessage(els.msgProduto, '⚠️ Limite de 999 registros atingido!', 'error');
         return;
       }
 
       const produto = {
         tipo_registro: 'compra',
         nome_produto: els.nomeProduto.value.trim(),
-        categoria: els.categoriaProduto.value.trim(),
+        categoria: els.categoriaProduto.value.trim() || 'Sem categoria',
         preco_compra: parseFloat(els.precoCompraProduto.value) || 0,
         preco_venda: parseFloat(els.precoVendaProduto.value) || 0,
         quantidade: parseInt(els.qtdEstoque.value) || 0,
@@ -607,30 +572,31 @@
       };
 
       els.btnCadastrarProduto.disabled = true;
-      els.msgProduto.textContent = 'Cadastrando...';
-      els.msgProduto.className = 'texto-elegante text-sm text-center text-gray-400';
+      els.btnCadastrarProduto.innerHTML = '<div class="spinner"></div> Cadastrando...';
 
       const result = await window.dataSdk.create(produto);
 
       if (result.isOk) {
-        els.msgProduto.textContent = '✅ Produto cadastrado com sucesso!';
-        els.msgProduto.className = 'texto-elegante text-sm text-center text-green-400';
+        utils.showMessage(els.msgProduto, '✅ Produto cadastrado com sucesso!', 'success');
         els.formProduto.reset();
+        setTimeout(() => {
+          els.msgProduto.textContent = '';
+        }, 3000);
       } else {
-        els.msgProduto.textContent = '❌ Erro ao cadastrar';
-        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+        utils.showMessage(els.msgProduto, '❌ Erro ao cadastrar produto', 'error');
       }
 
       els.btnCadastrarProduto.disabled = false;
+      els.btnCadastrarProduto.innerHTML = '💾 Cadastrar produto';
     });
 
-    // ========== ATUALIZAR LISTA PRODUTOS ==========
+    // ========== ATUALIZAR PRODUTOS ==========
     function atualizarProdutos(data) {
       const produtos = data.filter(r => r.tipo_registro === 'compra');
       els.contadorProdutos.textContent = `${produtos.length} ${produtos.length === 1 ? 'produto' : 'produtos'}`;
 
       if (produtos.length === 0) {
-        els.listaProdutos.innerHTML = '<p id="sem-produtos" class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>';
+        els.listaProdutos.innerHTML = '<p class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>';
         return;
       }
 
@@ -647,7 +613,7 @@
           <div class="flex justify-between items-start">
             <div>
               <p class="texto-elegante text-sm font-semibold text-gray-900">${item.nome_produto}</p>
-              <p class="texto-elegante text-xs text-gray-600">${item.categoria || 'Sem categoria'} • Estoque: ${item.quantidade} un</p>
+              <p class="texto-elegante text-xs text-gray-600">${item.categoria} • Estoque: ${item.quantidade} un</p>
               <p class="texto-elegante text-xs text-gray-500 mt-1">Compra: ${utils.formatMoney(item.preco_compra)} • Venda: ${utils.formatMoney(item.preco_venda)}</p>
             </div>
             <span class="texto-elegante text-xs font-medium text-green-600">+${margemPercent}%</span>
@@ -658,7 +624,7 @@
       });
     }
 
-    // ========== ATUALIZAR LISTA PRODUTOS PDV ==========
+    // ========== ATUALIZAR PRODUTOS PDV ==========
     function atualizarProdutosPdv(data) {
       const produtos = data.filter(r => r.tipo_registro === 'compra' && r.quantidade > 0);
 
@@ -694,13 +660,12 @@
       
       const encontrado = produtos.find(p => 
         p.nome_produto.toLowerCase().includes(termoLower) ||
-        p.categoria?.toLowerCase().includes(termoLower)
+        (p.categoria && p.categoria.toLowerCase().includes(termoLower))
       );
 
       if (encontrado) {
         if (encontrado.quantidade <= 0) {
-          els.msgBusca.textContent = '⚠️ Produto sem estoque disponível';
-          els.msgBusca.className = 'texto-elegante text-xs mt-2 text-yellow-600';
+          utils.showMessage(els.msgBusca, '⚠️ Produto sem estoque disponível', 'warning');
           els.resultadoBusca.style.display = 'none';
           state.produtoSelecionado = null;
           return;
@@ -708,16 +673,14 @@
 
         state.produtoSelecionado = encontrado;
         els.produtoNome.textContent = encontrado.nome_produto;
-        els.produtoInfo.textContent = `${encontrado.categoria || 'Sem categoria'} • Estoque: ${encontrado.quantidade} un`;
+        els.produtoInfo.textContent = `${encontrado.categoria} • Estoque: ${encontrado.quantidade} un`;
         els.produtoPreco.textContent = utils.formatMoney(encontrado.preco_venda);
         els.qtdVenda.value = 1;
         els.qtdVenda.max = encontrado.quantidade;
         els.resultadoBusca.style.display = 'block';
-        els.msgBusca.textContent = '✅ Produto encontrado!';
-        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-green-600';
+        utils.showMessage(els.msgBusca, '✅ Produto encontrado!', 'success');
       } else {
-        els.msgBusca.textContent = '❌ Produto não encontrado';
-        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
+        utils.showMessage(els.msgBusca, '❌ Produto não encontrado', 'error');
         els.resultadoBusca.style.display = 'none';
         state.produtoSelecionado = null;
       }
@@ -732,16 +695,9 @@
     });
 
     // ========== CARRINHO ==========
-    function calcularTotais() {
-      let desconto = 0;
-      let totalFinal = state.subtotalCarrinho;
-
-      return { desconto, totalFinal };
-    }
-
     function atualizarCarrinho() {
       if (state.carrinho.length === 0) {
-        els.carrinhoItens.innerHTML = '<p id="carrinho-vazio" class="texto-elegante text-sm text-gray-400">Carrinho vazio</p>';
+        els.carrinhoItens.innerHTML = '<p class="texto-elegante text-sm text-gray-400">Carrinho vazio</p>';
         els.btnFinalizarVenda.disabled = true;
         els.carrinhoTotalFinal.textContent = 'R$ 0,00';
         els.carrinhoTotalItens.textContent = '0';
@@ -751,12 +707,12 @@
       }
 
       els.carrinhoItens.innerHTML = '';
-      state.subtotalCarrinho = 0;
+      let subtotal = 0;
       let totalItens = 0;
 
       state.carrinho.forEach((item, index) => {
         const valorTotal = item.preco_venda * item.quantidade;
-        state.subtotalCarrinho += valorTotal;
+        subtotal += valorTotal;
         totalItens += item.quantidade;
 
         const div = document.createElement('div');
@@ -785,11 +741,8 @@
       });
 
       els.carrinhoTotalItens.textContent = totalItens;
+      els.carrinhoTotalFinal.textContent = utils.formatMoney(subtotal);
       els.formaPagamentoSection.style.display = 'block';
-
-      const { totalFinal } = calcularTotais();
-
-      els.carrinhoTotalFinal.textContent = utils.formatMoney(totalFinal);
       els.btnFinalizarVenda.disabled = !state.formaPagamentoSelecionada;
     }
 
@@ -799,8 +752,7 @@
       const qtd = parseInt(els.qtdVenda.value) || 1;
 
       if (qtd > state.produtoSelecionado.quantidade) {
-        els.msgBusca.textContent = '⚠️ Quantidade maior que o estoque';
-        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
+        utils.showMessage(els.msgBusca, '⚠️ Quantidade maior que o estoque', 'error');
         return;
       }
 
@@ -818,8 +770,7 @@
       atualizarCarrinho();
       els.resultadoBusca.style.display = 'none';
       els.buscarProduto.value = '';
-      els.msgBusca.textContent = '✅ Produto adicionado ao carrinho!';
-      els.msgBusca.className = 'texto-elegante text-xs mt-2 text-green-600';
+      utils.showMessage(els.msgBusca, '✅ Produto adicionado ao carrinho!', 'success');
       state.produtoSelecionado = null;
 
       setTimeout(() => {
@@ -833,7 +784,6 @@
         const forma = btn.dataset.forma;
         state.formaPagamentoSelecionada = forma;
 
-        // Atualizar visual dos botões
         document.querySelectorAll('.forma-pagamento-btn').forEach(b => {
           if (b.dataset.forma === forma) {
             b.className = 'forma-pagamento-btn texto-elegante bg-blue-600 border-2 border-blue-500 text-white py-2 rounded-xl text-xs font-medium';
@@ -842,7 +792,6 @@
           }
         });
 
-        // Mostrar campo de valor pago apenas para dinheiro
         if (forma === 'dinheiro') {
           els.valorPagoSection.style.display = 'block';
           els.valorPago.value = '';
@@ -855,13 +804,15 @@
       });
     });
 
-    // ========== CALCULAR TROCO ==========
     els.valorPago.addEventListener('input', () => {
       const valorPago = parseFloat(els.valorPago.value) || 0;
-      const { totalFinal } = calcularTotais();
+      let subtotal = 0;
+      state.carrinho.forEach(item => {
+        subtotal += item.preco_venda * item.quantidade;
+      });
 
-      if (valorPago >= totalFinal) {
-        const troco = valorPago - totalFinal;
+      if (valorPago >= subtotal) {
+        const troco = valorPago - subtotal;
         els.valorTroco.textContent = utils.formatMoney(troco);
         els.trocoInfo.style.display = 'block';
       } else {
@@ -873,8 +824,7 @@
       state.carrinho = [];
       state.formaPagamentoSelecionada = null;
       atualizarCarrinho();
-      els.msgVenda.textContent = '🗑️ Carrinho limpo';
-      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+      utils.showMessage(els.msgVenda, '🗑️ Carrinho limpo', 'info');
       setTimeout(() => {
         els.msgVenda.textContent = '';
       }, 2000);
@@ -884,25 +834,27 @@
     els.btnFinalizarVenda.addEventListener('click', async () => {
       if (!state.isDataSdkReady || state.carrinho.length === 0 || !state.formaPagamentoSelecionada) return;
 
-      // Validar valor pago se for dinheiro
       if (state.formaPagamentoSelecionada === 'dinheiro') {
         const valorPago = parseFloat(els.valorPago.value) || 0;
-        const { totalFinal } = calcularTotais();
+        let subtotal = 0;
+        state.carrinho.forEach(item => {
+          subtotal += item.preco_venda * item.quantidade;
+        });
         
-        if (valorPago < totalFinal) {
-          els.msgVenda.textContent = '⚠️ Valor pago insuficiente';
-          els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-yellow-400';
+        if (valorPago < subtotal) {
+          utils.showMessage(els.msgVenda, '⚠️ Valor pago insuficiente', 'warning');
           return;
         }
       }
 
       els.btnFinalizarVenda.disabled = true;
-      els.msgVenda.textContent = 'Processando venda...';
-      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+      els.btnFinalizarVenda.innerHTML = '<div class="spinner"></div> Processando...';
 
-      const { totalFinal } = calcularTotais();
+      let subtotal = 0;
+      state.carrinho.forEach(item => {
+        subtotal += item.preco_venda * item.quantidade;
+      });
 
-      // Registrar cada item do carrinho como venda
       for (const item of state.carrinho) {
         const venda = {
           tipo_registro: 'venda',
@@ -919,23 +871,23 @@
         const resultVenda = await window.dataSdk.create(venda);
         
         if (!resultVenda.isOk) {
-          els.msgVenda.textContent = '❌ Erro ao registrar venda';
-          els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-red-400';
+          utils.showMessage(els.msgVenda, '❌ Erro ao registrar venda', 'error');
           els.btnFinalizarVenda.disabled = false;
+          els.btnFinalizarVenda.innerHTML = '✅ Finalizar Venda';
           return;
         }
 
-        // Atualizar estoque do produto
         const produtoOriginal = state.currentRecords.find(r => 
           r.tipo_registro === 'compra' && 
-          r.nome_produto === item.nome_produto
+          r.nome_produto === item.nome_produto &&
+          r.__backendId
         );
 
         if (produtoOriginal) {
           const novoEstoque = produtoOriginal.quantidade - item.quantidade;
           const produtoAtualizado = {
             ...produtoOriginal,
-            quantidade: novoEstoque
+            quantidade: Math.max(0, novoEstoque)
           };
 
           await window.dataSdk.update(produtoAtualizado);
@@ -946,14 +898,13 @@
       
       if (state.formaPagamentoSelecionada === 'dinheiro') {
         const valorPago = parseFloat(els.valorPago.value) || 0;
-        const troco = valorPago - totalFinal;
+        const troco = valorPago - subtotal;
         if (troco > 0) {
           mensagemSucesso += ` Troco: ${utils.formatMoney(troco)}`;
         }
       }
 
-      els.msgVenda.textContent = mensagemSucesso;
-      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-green-400';
+      utils.showMessage(els.msgVenda, mensagemSucesso, 'success');
       
       state.carrinho = [];
       state.formaPagamentoSelecionada = null;
@@ -962,10 +913,11 @@
       setTimeout(() => {
         els.msgVenda.textContent = '';
         els.btnFinalizarVenda.disabled = false;
+        els.btnFinalizarVenda.innerHTML = '✅ Finalizar Venda';
       }, 4000);
     });
 
-    // ========== ATUALIZAR RESUMO ==========
+    // ========== RESUMO ==========
     function atualizarResumo(data) {
       const now = new Date();
       const mesAtual = now.getMonth();
@@ -995,13 +947,13 @@
       els.lucroTotal.textContent = utils.formatMoney(lucro);
     }
 
-    // ========== ATUALIZAR LISTA REGISTROS (VENDAS) ==========
+    // ========== REGISTROS ==========
     function atualizarRegistros(data) {
       const vendas = data.filter(r => r.tipo_registro === 'venda');
       els.contador.textContent = `${vendas.length} ${vendas.length === 1 ? 'venda' : 'vendas'}`;
 
       if (vendas.length === 0) {
-        els.listaRegistros.innerHTML = '<p id="sem-registros" class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>';
+        els.listaRegistros.innerHTML = '<p class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>';
         return;
       }
 
@@ -1038,7 +990,7 @@
       });
     }
 
-    // ========== ATUALIZAR CAIXA ==========
+    // ========== CAIXA ==========
     function atualizarCaixa() {
       const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
@@ -1065,7 +1017,7 @@
       const fechamentos = state.currentRecords.filter(r => r.tipo_registro === 'fechamento');
       
       if (fechamentos.length === 0) {
-        els.listaFechamentos.innerHTML = '<p id="sem-fechamentos" class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>';
+        els.listaFechamentos.innerHTML = '<p class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>';
         return;
       }
 
@@ -1098,16 +1050,15 @@
       });
     }
 
-    // ========== ATUALIZAR CONTROLE MENSAL ==========
+    // ========== CONTROLE ==========
     function atualizarControle() {
       const vendas = state.currentRecords.filter(r => r.tipo_registro === 'venda');
       
       if (vendas.length === 0) {
-        els.listaMeses.innerHTML = '<p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>';
+        els.listaMeses.innerHTML = '<p class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>';
         return;
       }
 
-      // Agrupar vendas por mês/ano
       const mesesMap = new Map();
 
       vendas.forEach(v => {
@@ -1134,7 +1085,6 @@
         mesData.totalVendas += valorVenda;
         mesData.totalLucro += lucro;
 
-        // Contabilizar produtos
         if (!mesData.produtos.has(v.nome_produto)) {
           mesData.produtos.set(v.nome_produto, {
             nome: v.nome_produto,
@@ -1148,7 +1098,6 @@
         prodData.valor += valorVenda;
       });
 
-      // Ordenar por data (mais recente primeiro)
       const mesesOrdenados = Array.from(mesesMap.entries()).sort((a, b) => b[0].localeCompare(a[0]));
 
       els.listaMeses.innerHTML = '';
@@ -1158,7 +1107,6 @@
                             'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         const nomeMes = nomesMeses[dados.mes];
 
-        // Encontrar produto mais e menos vendido
         const produtosArray = Array.from(dados.produtos.values());
         produtosArray.sort((a, b) => b.quantidade - a.quantidade);
         
@@ -1221,8 +1169,7 @@
       });
 
       if (vendasHoje.length === 0) {
-        els.msgCaixa.textContent = '⚠️ Não há vendas para fechar hoje';
-        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-yellow-400';
+        utils.showMessage(els.msgCaixa, '⚠️ Não há vendas para fechar hoje', 'warning');
         return;
       }
 
@@ -1247,86 +1194,62 @@
       };
 
       els.btnFecharCaixa.disabled = true;
-      els.msgCaixa.textContent = 'Fechando caixa...';
-      els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+      els.btnFecharCaixa.innerHTML = '<div class="spinner"></div> Fechando...';
 
       const result = await window.dataSdk.create(fechamento);
 
       if (result.isOk) {
-        els.msgCaixa.textContent = '✅ Caixa fechado com sucesso!';
-        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-green-400';
+        utils.showMessage(els.msgCaixa, '✅ Caixa fechado com sucesso!', 'success');
         setTimeout(() => {
           els.msgCaixa.textContent = '';
         }, 3000);
       } else {
-        els.msgCaixa.textContent = '❌ Erro ao fechar caixa';
-        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-red-400';
+        utils.showMessage(els.msgCaixa, '❌ Erro ao fechar caixa', 'error');
       }
 
       els.btnFecharCaixa.disabled = false;
+      els.btnFecharCaixa.innerHTML = '🔒 Fechar caixa do dia';
     });
 
     // ========== DATA SDK ==========
     const dataHandler = {
       onDataChanged(data) {
-        console.log('📊 onDataChanged chamado com', data?.length || 0, 'registros');
         state.currentRecords = data || [];
         state.isDataSdkReady = true;
-        
-        console.log('✅ SDK pronto! isDataSdkReady =', state.isDataSdkReady);
         
         atualizarResumo(state.currentRecords);
         atualizarRegistros(state.currentRecords);
         atualizarProdutos(state.currentRecords);
         atualizarProdutosPdv(state.currentRecords);
+        
         if (els.abaCaixa.style.display !== 'none') {
           atualizarCaixa();
+        }
+        if (els.abaControle.style.display !== 'none') {
+          atualizarControle();
         }
       }
     };
 
-    // Inicializar Data SDK quando a página carregar
     async function initDataSdk() {
-      console.log('🚀 Iniciando Data SDK...');
-      console.log('window.dataSdk existe?', !!window.dataSdk);
-      
       if (!window.dataSdk) {
-        console.error('❌ Data SDK não disponível no window');
-        // Tentar novamente após 500ms
-        setTimeout(initDataSdk, 500);
+        setTimeout(initDataSdk, 100);
         return;
       }
 
       try {
-        console.log('📞 Chamando window.dataSdk.init...');
         const result = await window.dataSdk.init(dataHandler);
-        console.log('📦 Resultado do init:', result);
-        
         if (result.isOk) {
-          console.log('✅ Data SDK inicializado com sucesso!');
           state.isDataSdkReady = true;
-          console.log('✅ state.isDataSdkReady =', state.isDataSdkReady);
-        } else {
-          console.error('❌ Erro ao inicializar Data SDK:', result.error);
-          state.isDataSdkReady = false;
         }
       } catch (error) {
-        console.error('❌ Exceção ao inicializar Data SDK:', error);
-        state.isDataSdkReady = false;
+        console.error('Erro ao inicializar Data SDK:', error);
       }
     }
 
-    // Aguardar o DOM estar pronto e inicializar
-    console.log('📄 document.readyState:', document.readyState);
-    
     if (document.readyState === 'loading') {
-      console.log('⏳ Aguardando DOMContentLoaded...');
-      document.addEventListener('DOMContentLoaded', () => {
-        console.log('✅ DOMContentLoaded disparado!');
-        initDataSdk();
-      });
+      document.addEventListener('DOMContentLoaded', initDataSdk);
     } else {
-      console.log('✅ DOM já carregado, inicializando imediatamente...');
       initDataSdk();
     }
 
@@ -1374,5 +1297,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0ab69243af61f',t:'MTc2NTI0MzExNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0b3ca1590f61f',t:'MTc2NTI0MzQ2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
