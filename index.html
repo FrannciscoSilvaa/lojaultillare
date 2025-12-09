@@ -1,1 +1,1333 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de gestão empresarial UTILARE - Controle de produtos, vendas e caixa">
+  <meta name="author" content="franciscosilva">
+  <title>Sistema UTILARE - Gestão Empresarial</title><!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script><!-- Canva SDKs -->
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script><!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ========== RESET E BASE ========== */
+    body {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+    
+    /* ========== TIPOGRAFIA ========== */
+    .logo-elegante {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+    }
+    
+    .texto-elegante {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    /* ========== BACKGROUND GRADIENTE ========== */
+    .fundo-elegante {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #1e40af 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .fundo-elegante::before {
+      content: '✦';
+      position: absolute;
+      font-size: 800px;
+      color: rgba(255, 255, 255, 0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(15deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .fundo-elegante::after {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .conteudo-principal {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* ========== SCROLLBAR CUSTOMIZADA ========== */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(59, 130, 246, 0.5);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(59, 130, 246, 0.7);
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full">
+  <div id="app-container" class="h-full w-full overflow-auto fundo-elegante"><!-- TELA DE LOGIN INICIAL DO SISTEMA -->
+   <div id="login-inicial" class="h-full w-full flex items-center justify-center p-4 conteudo-principal">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+     <div class="text-center mb-6">
+      <div class="text-6xl mb-4">
+       🏬
+      </div>
+      <h1 id="nome-loja-login" class="logo-elegante text-4xl text-blue-600 mb-2">ULTILLARE</h1>
+      <p id="slogan-loja-login" class="texto-elegante text-sm text-gray-600 italic mb-4">Onde cada detalhe faz a diferença</p>
+      <div class="h-px bg-gray-200 my-4"></div>
+      <p class="texto-elegante text-sm text-gray-700 font-medium">Sistema da Empresa</p>
+     </div>
+     <div class="space-y-3"><button id="btn-acesso-funcionaria" type="button" class="texto-elegante w-full bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold py-3 rounded-xl hover:from-green-700 hover:to-green-600 transition-all shadow-lg flex items-center justify-center gap-2"> 👤 Acesso Funcionária (Vendas) </button> <button id="btn-acesso-admin" type="button" class="texto-elegante w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all shadow-lg flex items-center justify-center gap-2"> 🔐 Acesso Administrador </button>
+     </div>
+     <p id="msg-login-inicial" class="texto-elegante text-sm text-center mt-4"></p>
+     <div class="mt-6 pt-4 border-t border-gray-200">
+      <p class="texto-elegante text-xs text-center text-gray-500">💻 Desenvolvido por <span class="font-medium">franciscosilva</span></p>
+     </div>
+    </div>
+   </div><!-- MODAL LOGIN ADMINISTRADOR -->
+   <div id="modal-senha-admin" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" style="display: none;">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+     <div class="text-center mb-6">
+      <div class="text-5xl mb-3">
+       🔐
+      </div>
+      <h2 class="texto-elegante text-2xl font-bold text-gray-900 mb-2">Acesso Administrador</h2>
+      <p class="texto-elegante text-sm text-gray-600">Digite a senha para acessar o sistema completo</p>
+     </div>
+     <form id="form-senha-admin-inicial">
+      <div class="mb-4"><label for="senha-admin-inicial" class="texto-elegante block text-sm font-medium text-gray-700 mb-2"> Senha de administrador </label> <input id="senha-admin-inicial" type="password" class="texto-elegante w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite a senha..." required>
+      </div><button type="submit" class="texto-elegante w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition-colors mb-3"> 🔓 Entrar como Administrador </button> <button type="button" id="btn-cancelar-modal-admin" class="texto-elegante w-full border border-gray-300 text-gray-700 font-medium py-2 rounded-xl hover:bg-gray-50 transition-colors"> Cancelar </button>
+      <p id="msg-senha-admin-inicial" class="texto-elegante text-sm text-center mt-3"></p>
+     </form>
+    </div>
+   </div><!-- APLICAÇÃO PRINCIPAL (oculta inicialmente) -->
+   <div id="app-principal" class="h-full w-full conteudo-principal" style="display: none;"><!-- Cabeçalho fixo -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 border-b border-gray-800 shadow-lg">
+     <div class="max-w-7xl mx-auto px-4 py-3">
+      <div class="flex items-center justify-between mb-3">
+       <div class="text-center flex-1 flex items-center justify-center gap-3">
+        <div class="text-3xl">
+         🏬
+        </div>
+        <div>
+         <h1 id="nome-loja-header" class="logo-elegante text-blue-400 text-3xl">ULTILLARE</h1>
+         <p id="slogan-loja-header" class="texto-elegante text-gray-400 text-xs italic">Onde cada detalhe faz a diferença</p>
+        </div>
+       </div>
+      </div>
+      <nav class="flex gap-2 justify-center items-center"><button id="btn-aba-produtos" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all bg-blue-600 text-white" data-aba="produtos"> 📦 Produtos </button> <button id="btn-aba-vendas" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="vendas"> 🛒 Vendas </button> <button id="btn-aba-caixa" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="caixa"> 💰 Caixa </button> <button id="btn-aba-controle" class="texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white" data-aba="controle"> 📊 Controle </button> <button id="btn-sair" class="texto-elegante px-4 py-2 rounded-xl text-sm font-medium transition-all bg-red-600 text-white hover:bg-red-700 ml-4"> 🚪 Sair </button>
+      </nav>
+     </div>
+    </header><!-- Conteúdo principal com padding-top para compensar header fixo -->
+    <main class="h-full w-full pt-32 pb-6 px-4 overflow-auto"><!-- ABA PRODUTOS -->
+     <div id="aba-produtos" class="max-w-4xl mx-auto space-y-4"><!-- Cadastro de produto -->
+      <section class="bg-gray-900 rounded-2xl p-5 shadow-xl border border-gray-800">
+       <h2 class="texto-elegante text-white text-lg font-semibold mb-4">➕ Cadastrar produto</h2>
+       <form id="form-produto" class="space-y-4">
+        <div><label for="nome-produto" class="texto-elegante block text-sm text-gray-300 mb-1">Nome do produto</label> <input id="nome-produto" type="text" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Pote plástico 2L" required>
+        </div>
+        <div><label for="categoria-produto" class="texto-elegante block text-sm text-gray-300 mb-1">Categoria</label> <input id="categoria-produto" type="text" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Cozinha">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+         <div><label for="preco-compra-produto" class="texto-elegante block text-sm text-gray-300 mb-1">Preço compra (R$)</label> <input id="preco-compra-produto" type="number" step="0.01" min="0" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+         </div>
+         <div><label for="preco-venda-produto" class="texto-elegante block text-sm text-gray-300 mb-1">Preço venda (R$)</label> <input id="preco-venda-produto" type="number" step="0.01" min="0" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+         </div>
+        </div>
+        <div><label for="qtd-estoque" class="texto-elegante block text-sm text-gray-300 mb-1">Quantidade em estoque</label> <input id="qtd-estoque" type="number" min="0" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div><button type="submit" id="btn-cadastrar-produto" class="texto-elegante w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"> 💾 Cadastrar produto </button>
+        <p id="msg-produto" class="texto-elegante text-sm text-center"></p>
+       </form>
+      </section><!-- Lista de produtos -->
+      <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
+       <div class="flex justify-between items-center mb-4">
+        <h2 class="texto-elegante text-gray-900 text-lg font-semibold">📦 Produtos cadastrados</h2><span id="contador-produtos" class="texto-elegante text-xs text-gray-500">0 produtos</span>
+       </div>
+       <div id="lista-produtos" class="space-y-2 max-h-96 overflow-auto">
+        <p id="sem-produtos" class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>
+       </div>
+      </section>
+     </div><!-- ABA VENDAS (oculta inicialmente) -->
+     <div id="aba-vendas" class="max-w-6xl mx-auto space-y-4" style="display: none;">
+      <div id="pdv-section" class="grid grid-cols-1 lg:grid-cols-2 gap-4"><!-- PDV - Buscar produto -->
+       <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
+        <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">🛒 PDV - Ponto de Venda</h2>
+        <form id="form-buscar-produto" class="mb-4"><label for="buscar-produto" class="texto-elegante block text-sm text-gray-700 mb-2">Buscar produto (nome ou código)</label>
+         <div class="flex gap-2"><input id="buscar-produto" type="text" class="texto-elegante flex-1 rounded-xl border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Digite o nome do produto..." required> <button type="submit" class="texto-elegante bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"> 🔍 Buscar </button>
+         </div>
+         <p id="msg-busca" class="texto-elegante text-xs mt-2"></p>
+        </form><!-- Resultado da busca -->
+        <div id="resultado-busca" style="display: none;" class="bg-gray-50 rounded-xl p-3 border border-gray-200 mb-4">
+         <div class="flex justify-between items-start mb-3">
+          <div>
+           <p id="produto-nome" class="texto-elegante text-sm font-semibold text-gray-900"></p>
+           <p id="produto-info" class="texto-elegante text-xs text-gray-600"></p>
+           <p id="produto-preco" class="texto-elegante text-sm font-bold text-green-600 mt-1"></p>
+          </div>
+         </div>
+         <div class="flex gap-2 items-center"><label for="qtd-venda" class="texto-elegante text-xs text-gray-700">Quantidade:</label> <input id="qtd-venda" type="number" min="1" value="1" class="texto-elegante w-20 rounded-lg border border-gray-300 px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <button id="btn-adicionar-carrinho" type="button" class="texto-elegante flex-1 bg-green-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-green-700 transition-colors"> ➕ Adicionar ao carrinho </button>
+         </div>
+        </div><!-- Lista de produtos disponíveis -->
+        <div>
+         <p class="texto-elegante text-xs text-gray-600 mb-2 font-medium">Produtos disponíveis:</p>
+         <div id="lista-produtos-pdv" class="space-y-1 max-h-64 overflow-auto">
+          <p class="texto-elegante text-xs text-gray-400">Nenhum produto cadastrado.</p>
+         </div>
+        </div>
+       </section><!-- Carrinho de compras -->
+       <section class="bg-gray-900 rounded-2xl p-5 shadow-xl border border-gray-800">
+        <h2 class="texto-elegante text-white text-lg font-semibold mb-4">🛍️ Carrinho do Cliente</h2>
+        <div id="carrinho-itens" class="space-y-2 mb-4 max-h-64 overflow-auto">
+         <p id="carrinho-vazio" class="texto-elegante text-sm text-gray-400">Carrinho vazio</p>
+        </div>
+        <div class="border-t border-gray-700 pt-4 mb-4">
+         <div class="flex justify-between items-center mb-2"><span class="texto-elegante text-white text-base font-semibold">Total a pagar:</span> <span id="carrinho-total-final" class="texto-elegante text-green-400 text-xl font-bold">R$ 0,00</span>
+         </div>
+         <div class="flex justify-between items-center"><span class="texto-elegante text-gray-400 text-xs">Total de itens:</span> <span id="carrinho-total-itens" class="texto-elegante text-gray-400 text-xs">0</span>
+         </div>
+        </div><!-- Forma de pagamento -->
+        <div id="forma-pagamento-section" class="mb-4" style="display: none;"><label class="texto-elegante block text-white text-sm font-medium mb-2">💳 Forma de pagamento</label>
+         <div class="grid grid-cols-3 gap-2 mb-3"><button type="button" class="forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all" data-forma="pix"> 📱 PIX </button> <button type="button" class="forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all" data-forma="cartao"> 💳 Cartão </button> <button type="button" class="forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all" data-forma="dinheiro"> 💵 Dinheiro </button>
+         </div><!-- Campo valor pago (apenas para dinheiro) -->
+         <div id="valor-pago-section" style="display: none;"><label for="valor-pago" class="texto-elegante block text-white text-sm mb-2">💵 Valor pago pelo cliente</label> <input id="valor-pago" type="number" step="0.01" min="0" class="texto-elegante w-full rounded-xl border border-gray-700 bg-gray-800 px-3 py-2 text-white text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 mb-2" placeholder="0,00">
+          <div id="troco-info" class="bg-green-900 bg-opacity-30 border border-green-600 rounded-xl p-3" style="display: none;">
+           <div class="flex justify-between items-center"><span class="texto-elegante text-green-400 text-sm">💰 Troco:</span> <span id="valor-troco" class="texto-elegante text-green-400 text-2xl font-bold">R$ 0,00</span>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="space-y-2"><button id="btn-finalizar-venda" type="button" class="texto-elegante w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled> ✅ Finalizar Venda </button> <button id="btn-limpar-carrinho" type="button" class="texto-elegante w-full border border-gray-700 text-gray-400 py-2 rounded-xl font-medium hover:bg-gray-800 transition-colors"> 🗑️ Limpar Carrinho </button>
+        </div>
+        <p id="msg-venda" class="texto-elegante text-sm text-center mt-3"></p>
+       </section>
+      </div><!-- Fim PDV Section --> <!-- Resumo do mês (apenas para admin) -->
+      <section id="resumo-mes-section" class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200" style="display: none;">
+       <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">📊 Resumo do mês</h2>
+       <div class="grid grid-cols-3 gap-3">
+        <div class="bg-blue-50 rounded-xl p-3 border border-blue-200">
+         <p class="texto-elegante text-xs text-gray-600 mb-1">Compras</p>
+         <p id="total-compras" class="texto-elegante text-sm font-bold text-blue-600">R$ 0,00</p>
+        </div>
+        <div class="bg-green-50 rounded-xl p-3 border border-green-200">
+         <p class="texto-elegante text-xs text-gray-600 mb-1">Vendas</p>
+         <p id="total-vendas" class="texto-elegante text-sm font-bold text-green-600">R$ 0,00</p>
+        </div>
+        <div class="bg-yellow-50 rounded-xl p-3 border border-yellow-200">
+         <p class="texto-elegante text-xs text-gray-600 mb-1">Lucro</p>
+         <p id="lucro-total" class="texto-elegante text-sm font-bold text-yellow-600">R$ 0,00</p>
+        </div>
+       </div>
+      </section><!-- Últimos registros (apenas para admin) -->
+      <section id="historico-vendas-section" class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200" style="display: none;">
+       <div class="flex justify-between items-center mb-4">
+        <h2 class="texto-elegante text-gray-900 text-lg font-semibold">📋 Histórico de vendas</h2><span id="contador" class="texto-elegante text-xs text-gray-500">0 vendas</span>
+       </div>
+       <div id="lista-registros" class="space-y-2 max-h-96 overflow-auto">
+        <p id="sem-registros" class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>
+       </div>
+      </section>
+     </div><!-- ABA CONTROLE (oculta inicialmente) -->
+     <div id="aba-controle" class="max-w-6xl mx-auto space-y-4" style="display: none;">
+      <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
+       <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">📊 Controle Mensal de Vendas</h2>
+       <p class="texto-elegante text-sm text-gray-600 mb-4">Análise detalhada por mês com vendas, lucros e produtos</p>
+       <div id="lista-meses" class="space-y-4">
+        <p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>
+       </div>
+      </section>
+     </div><!-- ABA CAIXA (oculta inicialmente) -->
+     <div id="aba-caixa" class="max-w-4xl mx-auto space-y-4" style="display: none;"><!-- Resumo do caixa -->
+      <section class="bg-white rounded-2xl p-5 shadow-xl border border-gray-200">
+       <h2 class="texto-elegante text-gray-900 text-lg font-semibold mb-4">💰 Caixa do dia</h2>
+       <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="bg-green-50 rounded-xl p-4 border border-green-200">
+         <p class="texto-elegante text-sm text-gray-600 mb-1">Total de vendas hoje</p>
+         <p id="vendas-hoje" class="texto-elegante text-2xl font-bold text-green-600">R$ 0,00</p>
+         <p id="qtd-vendas-hoje" class="texto-elegante text-xs text-gray-500 mt-1">0 vendas</p>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+         <p class="texto-elegante text-sm text-gray-600 mb-1">Lucro estimado hoje</p>
+         <p id="lucro-hoje" class="texto-elegante text-2xl font-bold text-blue-600">R$ 0,00</p>
+         <p class="texto-elegante text-xs text-gray-500 mt-1">Baseado no preço de compra</p>
+        </div>
+       </div><button id="btn-fechar-caixa" type="button" class="texto-elegante w-full bg-red-600 text-white py-3 rounded-xl font-semibold hover:bg-red-700 transition-colors"> 🔒 Fechar caixa do dia </button>
+       <p id="msg-caixa" class="texto-elegante text-sm text-center mt-3"></p>
+      </section><!-- Histórico de fechamentos -->
+      <section class="bg-gray-900 rounded-2xl p-5 shadow-xl border border-gray-800">
+       <h2 class="texto-elegante text-white text-lg font-semibold mb-4">📅 Histórico de fechamentos</h2>
+       <div id="lista-fechamentos" class="space-y-2 max-h-96 overflow-auto">
+        <p id="sem-fechamentos" class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>
+       </div>
+      </section>
+     </div>
+    </main>
+   </div>
+  </div>
+  <script>
+    /**
+     * ========================================
+     * SISTEMA UTILARE - GESTÃO EMPRESARIAL
+     * ========================================
+     * Desenvolvido por: franciscosilva
+     * Versão: 1.0.0
+     * Descrição: Sistema completo de gestão com controle de produtos,
+     *            vendas, caixa e relatórios mensais
+     * ========================================
+     */
 
+    // ========== CONFIGURAÇÃO ==========
+    const CONFIG = {
+      SENHA_ADMIN: "marliane123",
+      LIMITE_REGISTROS: 999,
+      VERSAO: "1.0.0"
+    };
+
+    const defaultConfig = {
+      background_color: "#1e3a8a",
+      surface_color: "#111827",
+      text_color: "#ffffff",
+      primary_action_color: "#2563eb",
+      secondary_action_color: "#10b981",
+      font_family: "Montserrat",
+      font_size: 14,
+      nome_loja: "ULTILLARE",
+      slogan_loja: "Onde cada detalhe faz a diferença"
+    };
+
+    // ========== ESTADO GLOBAL ==========
+    const state = {
+      tipoUsuario: null,
+      currentRecords: [],
+      isDataSdkReady: false,
+      produtoSelecionado: null,
+      carrinho: [],
+      formaPagamentoSelecionada: null,
+      subtotalCarrinho: 0
+    };
+
+    // ========== ELEMENTOS DOM ==========
+    const els = {
+      loginInicial: document.getElementById('login-inicial'),
+      appPrincipal: document.getElementById('app-principal'),
+      modalSenhaAdmin: document.getElementById('modal-senha-admin'),
+      btnAcessoFuncionaria: document.getElementById('btn-acesso-funcionaria'),
+      btnAcessoAdmin: document.getElementById('btn-acesso-admin'),
+      formSenhaAdminInicial: document.getElementById('form-senha-admin-inicial'),
+      senhaAdminInicial: document.getElementById('senha-admin-inicial'),
+      msgSenhaAdminInicial: document.getElementById('msg-senha-admin-inicial'),
+      btnCancelarModalAdmin: document.getElementById('btn-cancelar-modal-admin'),
+      msgLoginInicial: document.getElementById('msg-login-inicial'),
+      btnAbaProdutos: document.getElementById('btn-aba-produtos'),
+      btnAbaVendas: document.getElementById('btn-aba-vendas'),
+      btnAbaCaixa: document.getElementById('btn-aba-caixa'),
+      btnAbaControle: document.getElementById('btn-aba-controle'),
+      abaProdutos: document.getElementById('aba-produtos'),
+      abaVendas: document.getElementById('aba-vendas'),
+      abaCaixa: document.getElementById('aba-caixa'),
+      abaControle: document.getElementById('aba-controle'),
+      listaMeses: document.getElementById('lista-meses'),
+      semDadosControle: document.getElementById('sem-dados-controle'),
+      pdvSection: document.getElementById('pdv-section'),
+      btnSair: document.getElementById('btn-sair'),
+      nomeLoja: document.querySelectorAll('#nome-loja-login, #nome-loja-header'),
+      sloganLoja: document.querySelectorAll('#slogan-loja-login, #slogan-loja-header'),
+      formProduto: document.getElementById('form-produto'),
+      nomeProduto: document.getElementById('nome-produto'),
+      categoriaProduto: document.getElementById('categoria-produto'),
+      precoCompraProduto: document.getElementById('preco-compra-produto'),
+      precoVendaProduto: document.getElementById('preco-venda-produto'),
+      qtdEstoque: document.getElementById('qtd-estoque'),
+      btnCadastrarProduto: document.getElementById('btn-cadastrar-produto'),
+      msgProduto: document.getElementById('msg-produto'),
+      listaProdutos: document.getElementById('lista-produtos'),
+      contadorProdutos: document.getElementById('contador-produtos'),
+      semProdutos: document.getElementById('sem-produtos'),
+      formBuscarProduto: document.getElementById('form-buscar-produto'),
+      buscarProduto: document.getElementById('buscar-produto'),
+      msgBusca: document.getElementById('msg-busca'),
+      resultadoBusca: document.getElementById('resultado-busca'),
+      produtoNome: document.getElementById('produto-nome'),
+      produtoInfo: document.getElementById('produto-info'),
+      produtoPreco: document.getElementById('produto-preco'),
+      qtdVenda: document.getElementById('qtd-venda'),
+      btnAdicionarCarrinho: document.getElementById('btn-adicionar-carrinho'),
+      listaProdutosPdv: document.getElementById('lista-produtos-pdv'),
+      carrinhoItens: document.getElementById('carrinho-itens'),
+      carrinhoVazio: document.getElementById('carrinho-vazio'),
+      carrinhoSubtotal: document.getElementById('carrinho-subtotal'),
+      carrinhoTotalItens: document.getElementById('carrinho-total-itens'),
+      carrinhoTotalFinal: document.getElementById('carrinho-total-final'),
+      descontoInfo: document.getElementById('desconto-info'),
+      valorDesconto: document.getElementById('valor-desconto'),
+      formaPagamentoSection: document.getElementById('forma-pagamento-section'),
+      valorPagoSection: document.getElementById('valor-pago-section'),
+      valorPago: document.getElementById('valor-pago'),
+      trocoInfo: document.getElementById('troco-info'),
+      valorTroco: document.getElementById('valor-troco'),
+      btnFinalizarVenda: document.getElementById('btn-finalizar-venda'),
+      btnLimparCarrinho: document.getElementById('btn-limpar-carrinho'),
+      msgVenda: document.getElementById('msg-venda'),
+      resumoMesSection: document.getElementById('resumo-mes-section'),
+      historicoVendasSection: document.getElementById('historico-vendas-section'),
+      totalCompras: document.getElementById('total-compras'),
+      totalVendas: document.getElementById('total-vendas'),
+      lucroTotal: document.getElementById('lucro-total'),
+      contador: document.getElementById('contador'),
+      listaRegistros: document.getElementById('lista-registros'),
+      semRegistros: document.getElementById('sem-registros'),
+      vendasHoje: document.getElementById('vendas-hoje'),
+      qtdVendasHoje: document.getElementById('qtd-vendas-hoje'),
+      lucroHoje: document.getElementById('lucro-hoje'),
+      btnFecharCaixa: document.getElementById('btn-fechar-caixa'),
+      msgCaixa: document.getElementById('msg-caixa'),
+      listaFechamentos: document.getElementById('lista-fechamentos'),
+      semFechamentos: document.getElementById('sem-fechamentos')
+    };
+
+    // ========== FUNÇÕES AUXILIARES ==========
+    const utils = {
+      formatMoney(value) {
+        return new Intl.NumberFormat('pt-BR', { 
+          style: 'currency', 
+          currency: 'BRL' 
+        }).format(value || 0);
+      },
+
+      formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('pt-BR');
+      },
+
+      showMessage(element, message, type = 'info') {
+        const colors = {
+          success: 'text-green-600',
+          error: 'text-red-600',
+          warning: 'text-yellow-600',
+          info: 'text-gray-600'
+        };
+        element.textContent = message;
+        element.className = `texto-elegante text-sm text-center mt-3 ${colors[type] || colors.info}`;
+      },
+
+      clearMessage(element, delay = 3000) {
+        setTimeout(() => {
+          element.textContent = '';
+        }, delay);
+      }
+    };
+
+    // ========== LOGIN INICIAL ==========
+    
+    els.btnAcessoFuncionaria.addEventListener('click', () => {
+      state.tipoUsuario = 'funcionaria';
+      els.msgLoginInicial.textContent = '✅ Acesso autorizado! Carregando sistema...';
+      els.msgLoginInicial.className = 'texto-elegante text-sm text-center mt-4 text-green-600';
+      
+      setTimeout(() => {
+        els.loginInicial.style.display = 'none';
+        els.appPrincipal.style.display = 'block';
+        atualizarVisibilidadeAbas();
+        mostrarAba('vendas');
+      }, 800);
+    });
+
+    els.btnAcessoAdmin.addEventListener('click', () => {
+      els.modalSenhaAdmin.style.display = 'flex';
+      els.senhaAdminInicial.value = '';
+      els.msgSenhaAdminInicial.textContent = '';
+    });
+
+    els.formSenhaAdminInicial.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const senha = els.senhaAdminInicial.value;
+      
+      if (senha === SENHA_ADMIN) {
+        tipoUsuario = 'admin';
+        els.msgSenhaAdminInicial.textContent = '✅ Acesso autorizado!';
+        els.msgSenhaAdminInicial.className = 'texto-elegante text-sm text-center mt-3 text-green-600';
+        
+        setTimeout(() => {
+          els.modalSenhaAdmin.style.display = 'none';
+          els.loginInicial.style.display = 'none';
+          els.appPrincipal.style.display = 'block';
+          atualizarVisibilidadeAbas();
+          mostrarAba('produtos');
+        }, 800);
+      } else {
+        els.msgSenhaAdminInicial.textContent = '❌ Senha incorreta';
+        els.msgSenhaAdminInicial.className = 'texto-elegante text-sm text-center mt-3 text-red-600';
+        els.senhaAdminInicial.value = '';
+      }
+    });
+
+    els.btnCancelarModalAdmin.addEventListener('click', () => {
+      els.modalSenhaAdmin.style.display = 'none';
+    });
+
+    // ========== NAVEGAÇÃO ABAS ==========
+    function mostrarAba(aba) {
+      document.querySelectorAll('.aba-btn').forEach(btn => {
+        if (btn.dataset.aba === aba) {
+          btn.className = 'texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all bg-blue-600 text-white';
+        } else {
+          btn.className = 'texto-elegante aba-btn px-6 py-2 rounded-xl text-sm font-medium transition-all text-gray-400 hover:text-white';
+        }
+      });
+
+      els.abaProdutos.style.display = 'none';
+      els.abaVendas.style.display = 'none';
+      els.abaCaixa.style.display = 'none';
+      els.abaControle.style.display = 'none';
+
+      if (aba === 'produtos') {
+        els.abaProdutos.style.display = 'block';
+      } else if (aba === 'vendas') {
+        els.abaVendas.style.display = 'block';
+        // Admin vê apenas resumo e histórico (sem PDV)
+        if (tipoUsuario === 'admin') {
+          els.pdvSection.style.display = 'none';
+          els.resumoMesSection.style.display = 'block';
+          els.historicoVendasSection.style.display = 'block';
+        } else {
+          // Funcionária vê apenas PDV
+          els.pdvSection.style.display = 'grid';
+          els.resumoMesSection.style.display = 'none';
+          els.historicoVendasSection.style.display = 'none';
+        }
+      } else if (aba === 'caixa') {
+        els.abaCaixa.style.display = 'block';
+        atualizarCaixa();
+      } else if (aba === 'controle') {
+        els.abaControle.style.display = 'block';
+        atualizarControle();
+      }
+    }
+
+    function atualizarVisibilidadeAbas() {
+      if (tipoUsuario === 'admin') {
+        // Admin: Produtos, Vendas (histórico), Caixa, Controle
+        els.btnAbaProdutos.style.display = 'inline-block';
+        els.btnAbaVendas.style.display = 'inline-block';
+        els.btnAbaCaixa.style.display = 'inline-block';
+        els.btnAbaControle.style.display = 'inline-block';
+      } else if (tipoUsuario === 'funcionaria') {
+        // Funcionária: Apenas Vendas (PDV)
+        els.btnAbaProdutos.style.display = 'none';
+        els.btnAbaVendas.style.display = 'inline-block';
+        els.btnAbaCaixa.style.display = 'none';
+        els.btnAbaControle.style.display = 'none';
+      }
+    }
+
+    els.btnAbaProdutos.addEventListener('click', () => mostrarAba('produtos'));
+    els.btnAbaVendas.addEventListener('click', () => mostrarAba('vendas'));
+    els.btnAbaCaixa.addEventListener('click', () => mostrarAba('caixa'));
+    els.btnAbaControle.addEventListener('click', () => mostrarAba('controle'));
+
+    // ========== BOTÃO SAIR ==========
+    els.btnSair.addEventListener('click', () => {
+      tipoUsuario = null;
+      carrinho = [];
+      formaPagamentoSelecionada = null;
+      produtoSelecionado = null;
+      atualizarCarrinho();
+      els.appPrincipal.style.display = 'none';
+      els.loginInicial.style.display = 'flex';
+      els.msgLoginInicial.textContent = '';
+      els.buscarProduto.value = '';
+      els.msgBusca.textContent = '';
+      els.msgVenda.textContent = '';
+      els.resultadoBusca.style.display = 'none';
+      mostrarAba('produtos');
+    });
+
+    // ========== FORMULÁRIO CADASTRO PRODUTO ==========
+    els.formProduto.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!isDataSdkReady) {
+        els.msgProduto.textContent = 'Aguarde a conexão com o sistema...';
+        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+        return;
+      }
+
+      if (currentRecords.length >= 999) {
+        els.msgProduto.textContent = 'Limite de 999 registros atingido!';
+        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+        return;
+      }
+
+      const produto = {
+        tipo_registro: 'compra',
+        nome_produto: els.nomeProduto.value.trim(),
+        categoria: els.categoriaProduto.value.trim(),
+        preco_compra: parseFloat(els.precoCompraProduto.value) || 0,
+        preco_venda: parseFloat(els.precoVendaProduto.value) || 0,
+        quantidade: parseInt(els.qtdEstoque.value) || 0,
+        data: new Date().toISOString(),
+        observacao: 'Produto cadastrado',
+        created_at: new Date().toISOString()
+      };
+
+      els.btnCadastrarProduto.disabled = true;
+      els.msgProduto.textContent = 'Cadastrando...';
+      els.msgProduto.className = 'texto-elegante text-sm text-center text-gray-400';
+
+      const result = await window.dataSdk.create(produto);
+
+      if (result.isOk) {
+        els.msgProduto.textContent = '✅ Produto cadastrado com sucesso!';
+        els.msgProduto.className = 'texto-elegante text-sm text-center text-green-400';
+        els.formProduto.reset();
+      } else {
+        els.msgProduto.textContent = '❌ Erro ao cadastrar';
+        els.msgProduto.className = 'texto-elegante text-sm text-center text-red-400';
+      }
+
+      els.btnCadastrarProduto.disabled = false;
+    });
+
+    // ========== ATUALIZAR LISTA PRODUTOS ==========
+    function atualizarProdutos(data) {
+      const produtos = data.filter(r => r.tipo_registro === 'compra');
+      els.contadorProdutos.textContent = `${produtos.length} ${produtos.length === 1 ? 'produto' : 'produtos'}`;
+
+      if (produtos.length === 0) {
+        els.listaProdutos.innerHTML = '<p id="sem-produtos" class="texto-elegante text-sm text-gray-400">Nenhum produto cadastrado.</p>';
+        return;
+      }
+
+      els.listaProdutos.innerHTML = '';
+
+      produtos.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-50 rounded-xl p-3 border border-gray-200';
+        
+        const margem = item.preco_venda - item.preco_compra;
+        const margemPercent = item.preco_compra > 0 ? ((margem / item.preco_compra) * 100).toFixed(0) : 0;
+
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="texto-elegante text-sm font-semibold text-gray-900">${item.nome_produto}</p>
+              <p class="texto-elegante text-xs text-gray-600">${item.categoria || 'Sem categoria'} • Estoque: ${item.quantidade} un</p>
+              <p class="texto-elegante text-xs text-gray-500 mt-1">Compra: ${formatMoney(item.preco_compra)} • Venda: ${formatMoney(item.preco_venda)}</p>
+            </div>
+            <span class="texto-elegante text-xs font-medium text-green-600">+${margemPercent}%</span>
+          </div>
+        `;
+        
+        els.listaProdutos.appendChild(div);
+      });
+    }
+
+    // ========== ATUALIZAR LISTA PRODUTOS PDV ==========
+    function atualizarProdutosPdv(data) {
+      const produtos = data.filter(r => r.tipo_registro === 'compra' && r.quantidade > 0);
+
+      if (produtos.length === 0) {
+        els.listaProdutosPdv.innerHTML = '<p class="texto-elegante text-xs text-gray-400">Nenhum produto disponível.</p>';
+        return;
+      }
+
+      els.listaProdutosPdv.innerHTML = '';
+
+      produtos.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-50 rounded-lg p-2 border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors';
+        
+        div.innerHTML = `
+          <p class="texto-elegante text-xs font-medium text-gray-900">${item.nome_produto}</p>
+          <p class="texto-elegante text-xs text-gray-600">${formatMoney(item.preco_venda)} • Estoque: ${item.quantidade}</p>
+        `;
+
+        div.addEventListener('click', () => {
+          els.buscarProduto.value = item.nome_produto;
+          buscarProdutoPorNome(item.nome_produto);
+        });
+        
+        els.listaProdutosPdv.appendChild(div);
+      });
+    }
+
+    // ========== BUSCAR PRODUTO ==========
+    function buscarProdutoPorNome(termo) {
+      const produtos = currentRecords.filter(r => r.tipo_registro === 'compra');
+      const termoLower = termo.toLowerCase().trim();
+      
+      const encontrado = produtos.find(p => 
+        p.nome_produto.toLowerCase().includes(termoLower) ||
+        p.categoria?.toLowerCase().includes(termoLower)
+      );
+
+      if (encontrado) {
+        if (encontrado.quantidade <= 0) {
+          els.msgBusca.textContent = '⚠️ Produto sem estoque disponível';
+          els.msgBusca.className = 'texto-elegante text-xs mt-2 text-yellow-600';
+          els.resultadoBusca.style.display = 'none';
+          produtoSelecionado = null;
+          return;
+        }
+
+        produtoSelecionado = encontrado;
+        els.produtoNome.textContent = encontrado.nome_produto;
+        els.produtoInfo.textContent = `${encontrado.categoria || 'Sem categoria'} • Estoque: ${encontrado.quantidade} un`;
+        els.produtoPreco.textContent = formatMoney(encontrado.preco_venda);
+        els.qtdVenda.value = 1;
+        els.qtdVenda.max = encontrado.quantidade;
+        els.resultadoBusca.style.display = 'block';
+        els.msgBusca.textContent = '✅ Produto encontrado!';
+        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-green-600';
+      } else {
+        els.msgBusca.textContent = '❌ Produto não encontrado';
+        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
+        els.resultadoBusca.style.display = 'none';
+        produtoSelecionado = null;
+      }
+    }
+
+    els.formBuscarProduto.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const termo = els.buscarProduto.value.trim();
+      if (termo) {
+        buscarProdutoPorNome(termo);
+      }
+    });
+
+    // ========== CARRINHO ==========
+    function calcularTotais() {
+      let desconto = 0;
+      let totalFinal = subtotalCarrinho;
+
+      return { desconto, totalFinal };
+    }
+
+    function atualizarCarrinho() {
+      if (carrinho.length === 0) {
+        els.carrinhoItens.innerHTML = '<p id="carrinho-vazio" class="texto-elegante text-sm text-gray-400">Carrinho vazio</p>';
+        els.btnFinalizarVenda.disabled = true;
+        els.carrinhoSubtotal.textContent = 'R$ 0,00';
+        els.carrinhoTotalFinal.textContent = 'R$ 0,00';
+        els.carrinhoTotalItens.textContent = '0';
+        els.formaPagamentoSection.style.display = 'none';
+        els.descontoInfo.style.display = 'none';
+        formaPagamentoSelecionada = null;
+        return;
+      }
+
+      els.carrinhoItens.innerHTML = '';
+      subtotalCarrinho = 0;
+      let totalItens = 0;
+
+      carrinho.forEach((item, index) => {
+        const valorTotal = item.preco_venda * item.quantidade;
+        subtotalCarrinho += valorTotal;
+        totalItens += item.quantidade;
+
+        const div = document.createElement('div');
+        div.className = 'bg-gray-800 rounded-xl p-3 border border-gray-700';
+        
+        div.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <div class="flex-1">
+              <p class="texto-elegante text-white text-sm font-medium">${item.nome_produto}</p>
+              <p class="texto-elegante text-gray-400 text-xs">${item.quantidade} un × ${formatMoney(item.preco_venda)}</p>
+            </div>
+            <button class="texto-elegante text-red-400 hover:text-red-300 text-xs font-medium" data-index="${index}">
+              🗑️ Remover
+            </button>
+          </div>
+          <p class="texto-elegante text-green-400 text-sm font-bold">${formatMoney(valorTotal)}</p>
+        `;
+
+        const btnRemover = div.querySelector('button');
+        btnRemover.addEventListener('click', () => {
+          carrinho.splice(index, 1);
+          atualizarCarrinho();
+        });
+        
+        els.carrinhoItens.appendChild(div);
+      });
+
+      els.carrinhoTotalItens.textContent = totalItens;
+      els.formaPagamentoSection.style.display = 'block';
+
+      const { totalFinal } = calcularTotais();
+
+      els.carrinhoTotalFinal.textContent = formatMoney(totalFinal);
+      els.btnFinalizarVenda.disabled = !formaPagamentoSelecionada;
+    }
+
+    els.btnAdicionarCarrinho.addEventListener('click', () => {
+      if (!produtoSelecionado) return;
+
+      const qtd = parseInt(els.qtdVenda.value) || 1;
+
+      if (qtd > produtoSelecionado.quantidade) {
+        els.msgBusca.textContent = '⚠️ Quantidade maior que o estoque';
+        els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
+        return;
+      }
+
+      const itemExistente = carrinho.find(i => i.nome_produto === produtoSelecionado.nome_produto);
+
+      if (itemExistente) {
+        itemExistente.quantidade += qtd;
+      } else {
+        carrinho.push({
+          ...produtoSelecionado,
+          quantidade: qtd
+        });
+      }
+
+      atualizarCarrinho();
+      els.resultadoBusca.style.display = 'none';
+      els.buscarProduto.value = '';
+      els.msgBusca.textContent = '✅ Produto adicionado ao carrinho!';
+      els.msgBusca.className = 'texto-elegante text-xs mt-2 text-green-600';
+      produtoSelecionado = null;
+
+      setTimeout(() => {
+        els.msgBusca.textContent = '';
+      }, 2000);
+    });
+
+    // ========== FORMA DE PAGAMENTO ==========
+    document.querySelectorAll('.forma-pagamento-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const forma = btn.dataset.forma;
+        formaPagamentoSelecionada = forma;
+
+        // Atualizar visual dos botões
+        document.querySelectorAll('.forma-pagamento-btn').forEach(b => {
+          if (b.dataset.forma === forma) {
+            b.className = 'forma-pagamento-btn texto-elegante bg-blue-600 border-2 border-blue-500 text-white py-2 rounded-xl text-xs font-medium';
+          } else {
+            b.className = 'forma-pagamento-btn texto-elegante bg-gray-800 border-2 border-gray-700 text-gray-300 py-2 rounded-xl text-xs font-medium hover:border-blue-500 transition-all';
+          }
+        });
+
+        // Mostrar campo de valor pago apenas para dinheiro
+        if (forma === 'dinheiro') {
+          els.valorPagoSection.style.display = 'block';
+          els.valorPago.value = '';
+          els.trocoInfo.style.display = 'none';
+        } else {
+          els.valorPagoSection.style.display = 'none';
+        }
+
+        atualizarCarrinho();
+      });
+    });
+
+    // ========== CALCULAR TROCO ==========
+    els.valorPago.addEventListener('input', () => {
+      const valorPago = parseFloat(els.valorPago.value) || 0;
+      const { totalFinal } = calcularTotais();
+
+      if (valorPago >= totalFinal) {
+        const troco = valorPago - totalFinal;
+        els.valorTroco.textContent = formatMoney(troco);
+        els.trocoInfo.style.display = 'block';
+      } else {
+        els.trocoInfo.style.display = 'none';
+      }
+    });
+
+    els.btnLimparCarrinho.addEventListener('click', () => {
+      carrinho = [];
+      formaPagamentoSelecionada = null;
+      atualizarCarrinho();
+      els.msgVenda.textContent = '🗑️ Carrinho limpo';
+      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+      setTimeout(() => {
+        els.msgVenda.textContent = '';
+      }, 2000);
+    });
+
+    // ========== FINALIZAR VENDA ==========
+    els.btnFinalizarVenda.addEventListener('click', async () => {
+      if (!isDataSdkReady || carrinho.length === 0 || !formaPagamentoSelecionada) return;
+
+      // Validar valor pago se for dinheiro
+      if (formaPagamentoSelecionada === 'dinheiro') {
+        const valorPago = parseFloat(els.valorPago.value) || 0;
+        const { totalFinal } = calcularTotais();
+        
+        if (valorPago < totalFinal) {
+          els.msgVenda.textContent = '⚠️ Valor pago insuficiente';
+          els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-yellow-400';
+          return;
+        }
+      }
+
+      els.btnFinalizarVenda.disabled = true;
+      els.msgVenda.textContent = 'Processando venda...';
+      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+
+      const { totalFinal } = calcularTotais();
+
+      // Registrar cada item do carrinho como venda
+      for (const item of carrinho) {
+        const venda = {
+          tipo_registro: 'venda',
+          nome_produto: item.nome_produto,
+          categoria: item.categoria,
+          preco_compra: item.preco_compra,
+          preco_venda: item.preco_venda,
+          quantidade: item.quantidade,
+          data: new Date().toISOString(),
+          observacao: `Pagamento: ${formaPagamentoSelecionada.toUpperCase()}`,
+          created_at: new Date().toISOString()
+        };
+
+        const resultVenda = await window.dataSdk.create(venda);
+        
+        if (!resultVenda.isOk) {
+          els.msgVenda.textContent = '❌ Erro ao registrar venda';
+          els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-red-400';
+          els.btnFinalizarVenda.disabled = false;
+          return;
+        }
+
+        // Atualizar estoque do produto
+        const produtoOriginal = currentRecords.find(r => 
+          r.tipo_registro === 'compra' && 
+          r.nome_produto === item.nome_produto
+        );
+
+        if (produtoOriginal) {
+          const novoEstoque = produtoOriginal.quantidade - item.quantidade;
+          const produtoAtualizado = {
+            ...produtoOriginal,
+            quantidade: novoEstoque
+          };
+
+          await window.dataSdk.update(produtoAtualizado);
+        }
+      }
+
+      let mensagemSucesso = '✅ Venda finalizada com sucesso!';
+      
+      if (formaPagamentoSelecionada === 'dinheiro') {
+        const valorPago = parseFloat(els.valorPago.value) || 0;
+        const troco = valorPago - totalFinal;
+        if (troco > 0) {
+          mensagemSucesso += ` Troco: ${formatMoney(troco)}`;
+        }
+      }
+
+      els.msgVenda.textContent = mensagemSucesso;
+      els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-green-400';
+      
+      carrinho = [];
+      formaPagamentoSelecionada = null;
+      atualizarCarrinho();
+
+      setTimeout(() => {
+        els.msgVenda.textContent = '';
+        els.btnFinalizarVenda.disabled = false;
+      }, 4000);
+    });
+
+    // ========== ATUALIZAR RESUMO ==========
+    function atualizarResumo(data) {
+      const now = new Date();
+      const mesAtual = now.getMonth();
+      const anoAtual = now.getFullYear();
+
+      let totalCompras = 0;
+      let totalVendas = 0;
+      let lucro = 0;
+
+      data.forEach(item => {
+        const dataItem = new Date(item.data);
+        if (dataItem.getMonth() !== mesAtual || dataItem.getFullYear() !== anoAtual) return;
+
+        const valorCompra = (item.preco_compra || 0) * (item.quantidade || 0);
+        const valorVenda = (item.preco_venda || 0) * (item.quantidade || 0);
+
+        if (item.tipo_registro === 'compra') {
+          totalCompras += valorCompra;
+        } else if (item.tipo_registro === 'venda') {
+          totalVendas += valorVenda;
+          lucro += (item.preco_venda - item.preco_compra) * item.quantidade;
+        }
+      });
+
+      els.totalCompras.textContent = formatMoney(totalCompras);
+      els.totalVendas.textContent = formatMoney(totalVendas);
+      els.lucroTotal.textContent = formatMoney(lucro);
+    }
+
+    // ========== ATUALIZAR LISTA REGISTROS (VENDAS) ==========
+    function atualizarRegistros(data) {
+      const vendas = data.filter(r => r.tipo_registro === 'venda');
+      els.contador.textContent = `${vendas.length} ${vendas.length === 1 ? 'venda' : 'vendas'}`;
+
+      if (vendas.length === 0) {
+        els.listaRegistros.innerHTML = '<p id="sem-registros" class="texto-elegante text-sm text-gray-400">Nenhuma venda registrada.</p>';
+        return;
+      }
+
+      const sorted = [...vendas].sort((a, b) => {
+        const da = new Date(a.created_at || 0).getTime();
+        const db = new Date(b.created_at || 0).getTime();
+        return db - da;
+      });
+
+      els.listaRegistros.innerHTML = '';
+
+      sorted.slice(0, 20).forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-50 rounded-xl p-3 border border-gray-200';
+        
+        const valor = item.preco_venda * item.quantidade;
+        const lucro = (item.preco_venda - item.preco_compra) * item.quantidade;
+
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div class="flex gap-2">
+              <span>⬇️</span>
+              <div>
+                <p class="texto-elegante text-sm font-semibold text-gray-900">${item.nome_produto}</p>
+                <p class="texto-elegante text-xs text-gray-600">${item.quantidade} un • ${formatDate(item.data)}</p>
+                <p class="texto-elegante text-xs text-green-600">Lucro: ${formatMoney(lucro)}</p>
+              </div>
+            </div>
+            <span class="texto-elegante text-sm font-bold text-green-600">${formatMoney(valor)}</span>
+          </div>
+        `;
+        
+        els.listaRegistros.appendChild(div);
+      });
+    }
+
+    // ========== ATUALIZAR CAIXA ==========
+    function atualizarCaixa() {
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      const vendasHoje = currentRecords.filter(r => {
+        if (r.tipo_registro !== 'venda') return false;
+        const dataVenda = new Date(r.data);
+        dataVenda.setHours(0, 0, 0, 0);
+        return dataVenda.getTime() === hoje.getTime();
+      });
+
+      let totalVendas = 0;
+      let totalLucro = 0;
+
+      vendasHoje.forEach(v => {
+        totalVendas += v.preco_venda * v.quantidade;
+        totalLucro += (v.preco_venda - v.preco_compra) * v.quantidade;
+      });
+
+      els.vendasHoje.textContent = formatMoney(totalVendas);
+      els.qtdVendasHoje.textContent = `${vendasHoje.length} ${vendasHoje.length === 1 ? 'venda' : 'vendas'}`;
+      els.lucroHoje.textContent = formatMoney(totalLucro);
+
+      const fechamentos = currentRecords.filter(r => r.tipo_registro === 'fechamento');
+      
+      if (fechamentos.length === 0) {
+        els.listaFechamentos.innerHTML = '<p id="sem-fechamentos" class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>';
+        return;
+      }
+
+      const sortedFechamentos = [...fechamentos].sort((a, b) => {
+        const da = new Date(a.created_at || 0).getTime();
+        const db = new Date(b.created_at || 0).getTime();
+        return db - da;
+      });
+
+      els.listaFechamentos.innerHTML = '';
+
+      sortedFechamentos.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-800 rounded-xl p-3 border border-gray-700';
+        
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="texto-elegante text-white font-semibold text-sm">📅 ${formatDate(f.data)}</p>
+              <p class="texto-elegante text-gray-400 text-xs">${f.observacao}</p>
+            </div>
+            <div class="text-right">
+              <p class="texto-elegante text-green-400 font-bold text-sm">${formatMoney(f.preco_venda)}</p>
+              <p class="texto-elegante text-blue-400 text-xs">Lucro: ${formatMoney(f.preco_compra)}</p>
+            </div>
+          </div>
+        `;
+        
+        els.listaFechamentos.appendChild(div);
+      });
+    }
+
+    // ========== ATUALIZAR CONTROLE MENSAL ==========
+    function atualizarControle() {
+      const vendas = currentRecords.filter(r => r.tipo_registro === 'venda');
+      
+      if (vendas.length === 0) {
+        els.listaMeses.innerHTML = '<p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>';
+        return;
+      }
+
+      // Agrupar vendas por mês/ano
+      const mesesMap = new Map();
+
+      vendas.forEach(v => {
+        const data = new Date(v.data);
+        const mesAno = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}`;
+        
+        if (!mesesMap.has(mesAno)) {
+          mesesMap.set(mesAno, {
+            ano: data.getFullYear(),
+            mes: data.getMonth(),
+            vendas: [],
+            totalVendas: 0,
+            totalLucro: 0,
+            produtos: new Map()
+          });
+        }
+
+        const mesData = mesesMap.get(mesAno);
+        mesData.vendas.push(v);
+        
+        const valorVenda = v.preco_venda * v.quantidade;
+        const lucro = (v.preco_venda - v.preco_compra) * v.quantidade;
+        
+        mesData.totalVendas += valorVenda;
+        mesData.totalLucro += lucro;
+
+        // Contabilizar produtos
+        if (!mesData.produtos.has(v.nome_produto)) {
+          mesData.produtos.set(v.nome_produto, {
+            nome: v.nome_produto,
+            quantidade: 0,
+            valor: 0
+          });
+        }
+        
+        const prodData = mesData.produtos.get(v.nome_produto);
+        prodData.quantidade += v.quantidade;
+        prodData.valor += valorVenda;
+      });
+
+      // Ordenar por data (mais recente primeiro)
+      const mesesOrdenados = Array.from(mesesMap.entries()).sort((a, b) => b[0].localeCompare(a[0]));
+
+      els.listaMeses.innerHTML = '';
+
+      mesesOrdenados.forEach(([mesAno, dados]) => {
+        const nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        const nomeMes = nomesMeses[dados.mes];
+
+        // Encontrar produto mais e menos vendido
+        const produtosArray = Array.from(dados.produtos.values());
+        produtosArray.sort((a, b) => b.quantidade - a.quantidade);
+        
+        const maisVendido = produtosArray[0];
+        const menosVendido = produtosArray[produtosArray.length - 1];
+
+        const div = document.createElement('div');
+        div.className = 'bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-5 border-2 border-blue-200 shadow-lg';
+        
+        div.innerHTML = `
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="texto-elegante text-xl font-bold text-gray-900">${nomeMes} ${dados.ano}</h3>
+              <p class="texto-elegante text-sm text-gray-600">${dados.vendas.length} ${dados.vendas.length === 1 ? 'venda realizada' : 'vendas realizadas'}</p>
+            </div>
+            <span class="texto-elegante text-3xl">📅</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-white rounded-xl p-4 border border-green-200">
+              <p class="texto-elegante text-xs text-gray-600 mb-1">💰 Total de Vendas</p>
+              <p class="texto-elegante text-2xl font-bold text-green-600">${formatMoney(dados.totalVendas)}</p>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-blue-200">
+              <p class="texto-elegante text-xs text-gray-600 mb-1">📈 Lucro Total</p>
+              <p class="texto-elegante text-2xl font-bold text-blue-600">${formatMoney(dados.totalLucro)}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-white rounded-xl p-3 border border-yellow-200">
+              <p class="texto-elegante text-xs text-gray-600 mb-1">🏆 Mais Vendido</p>
+              <p class="texto-elegante text-sm font-bold text-gray-900">${maisVendido.nome}</p>
+              <p class="texto-elegante text-xs text-gray-600">${maisVendido.quantidade} unidades • ${formatMoney(maisVendido.valor)}</p>
+            </div>
+            <div class="bg-white rounded-xl p-3 border border-gray-200">
+              <p class="texto-elegante text-xs text-gray-600 mb-1">📉 Menos Vendido</p>
+              <p class="texto-elegante text-sm font-bold text-gray-900">${menosVendido.nome}</p>
+              <p class="texto-elegante text-xs text-gray-600">${menosVendido.quantidade} unidades • ${formatMoney(menosVendido.valor)}</p>
+            </div>
+          </div>
+        `;
+        
+        els.listaMeses.appendChild(div);
+      });
+    }
+
+    // ========== FECHAR CAIXA ==========
+    els.btnFecharCaixa.addEventListener('click', async () => {
+      if (!isDataSdkReady) return;
+
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      const vendasHoje = currentRecords.filter(r => {
+        if (r.tipo_registro !== 'venda') return false;
+        const dataVenda = new Date(r.data);
+        dataVenda.setHours(0, 0, 0, 0);
+        return dataVenda.getTime() === hoje.getTime();
+      });
+
+      if (vendasHoje.length === 0) {
+        els.msgCaixa.textContent = '⚠️ Não há vendas para fechar hoje';
+        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-yellow-400';
+        return;
+      }
+
+      let totalVendas = 0;
+      let totalLucro = 0;
+
+      vendasHoje.forEach(v => {
+        totalVendas += v.preco_venda * v.quantidade;
+        totalLucro += (v.preco_venda - v.preco_compra) * v.quantidade;
+      });
+
+      const fechamento = {
+        tipo_registro: 'fechamento',
+        nome_produto: 'Fechamento de caixa',
+        categoria: 'Caixa',
+        preco_compra: totalLucro,
+        preco_venda: totalVendas,
+        quantidade: vendasHoje.length,
+        data: new Date().toISOString(),
+        observacao: `${vendasHoje.length} ${vendasHoje.length === 1 ? 'venda' : 'vendas'} registrada(s)`,
+        created_at: new Date().toISOString()
+      };
+
+      els.btnFecharCaixa.disabled = true;
+      els.msgCaixa.textContent = 'Fechando caixa...';
+      els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
+
+      const result = await window.dataSdk.create(fechamento);
+
+      if (result.isOk) {
+        els.msgCaixa.textContent = '✅ Caixa fechado com sucesso!';
+        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-green-400';
+        setTimeout(() => {
+          els.msgCaixa.textContent = '';
+        }, 3000);
+      } else {
+        els.msgCaixa.textContent = '❌ Erro ao fechar caixa';
+        els.msgCaixa.className = 'texto-elegante text-sm text-center mt-3 text-red-400';
+      }
+
+      els.btnFecharCaixa.disabled = false;
+    });
+
+    // ========== DATA SDK ==========
+    const dataHandler = {
+      onDataChanged(data) {
+        currentRecords = data || [];
+        atualizarResumo(currentRecords);
+        atualizarRegistros(currentRecords);
+        atualizarProdutos(currentRecords);
+        atualizarProdutosPdv(currentRecords);
+        if (els.abaCaixa.style.display !== 'none') {
+          atualizarCaixa();
+        }
+      }
+    };
+
+    (async function initDataSdk() {
+      if (!window.dataSdk) return;
+
+      const result = await window.dataSdk.init(dataHandler);
+      if (result.isOk) {
+        isDataSdkReady = true;
+      }
+    })();
+
+    // ========== ELEMENT SDK ==========
+    async function applyConfig(config) {
+      const cfg = config || defaultConfig;
+      
+      els.nomeLoja.forEach(el => {
+        el.textContent = cfg.nome_loja || defaultConfig.nome_loja;
+      });
+      
+      els.sloganLoja.forEach(el => {
+        el.textContent = cfg.slogan_loja || defaultConfig.slogan_loja;
+      });
+    }
+
+    (function initElementSdk() {
+      if (!window.elementSdk) {
+        applyConfig(defaultConfig);
+        return;
+      }
+
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          await applyConfig(config);
+        },
+        mapToCapabilities: (config) => {
+          return {
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          };
+        },
+        mapToEditPanelValues: (config) => {
+          const cfg = config || defaultConfig;
+          return new Map([
+            ['nome_loja', cfg.nome_loja || defaultConfig.nome_loja],
+            ['slogan_loja', cfg.slogan_loja || defaultConfig.slogan_loja]
+          ]);
+        }
+      });
+
+      applyConfig(window.elementSdk.config || defaultConfig);
+    })();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab07bf0e66cf630',t:'MTc2NTI0MTE3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
