@@ -1269,9 +1269,12 @@
     // ========== DATA SDK ==========
     const dataHandler = {
       onDataChanged(data) {
-        console.log('onDataChanged chamado com', data?.length || 0, 'registros');
+        console.log('📊 onDataChanged chamado com', data?.length || 0, 'registros');
         state.currentRecords = data || [];
         state.isDataSdkReady = true;
+        
+        console.log('✅ SDK pronto! isDataSdkReady =', state.isDataSdkReady);
+        
         atualizarResumo(state.currentRecords);
         atualizarRegistros(state.currentRecords);
         atualizarProdutos(state.currentRecords);
@@ -1284,30 +1287,46 @@
 
     // Inicializar Data SDK quando a página carregar
     async function initDataSdk() {
-      console.log('Iniciando Data SDK...');
+      console.log('🚀 Iniciando Data SDK...');
+      console.log('window.dataSdk existe?', !!window.dataSdk);
       
       if (!window.dataSdk) {
-        console.error('Data SDK não disponível');
+        console.error('❌ Data SDK não disponível no window');
+        // Tentar novamente após 500ms
+        setTimeout(initDataSdk, 500);
         return;
       }
 
       try {
+        console.log('📞 Chamando window.dataSdk.init...');
         const result = await window.dataSdk.init(dataHandler);
+        console.log('📦 Resultado do init:', result);
+        
         if (result.isOk) {
-          console.log('✅ Data SDK inicializado com sucesso');
+          console.log('✅ Data SDK inicializado com sucesso!');
           state.isDataSdkReady = true;
+          console.log('✅ state.isDataSdkReady =', state.isDataSdkReady);
         } else {
           console.error('❌ Erro ao inicializar Data SDK:', result.error);
+          state.isDataSdkReady = false;
         }
       } catch (error) {
         console.error('❌ Exceção ao inicializar Data SDK:', error);
+        state.isDataSdkReady = false;
       }
     }
 
     // Aguardar o DOM estar pronto e inicializar
+    console.log('📄 document.readyState:', document.readyState);
+    
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initDataSdk);
+      console.log('⏳ Aguardando DOMContentLoaded...');
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('✅ DOMContentLoaded disparado!');
+        initDataSdk();
+      });
     } else {
+      console.log('✅ DOM já carregado, inicializando imediatamente...');
       initDataSdk();
     }
 
@@ -1355,5 +1374,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0a35f449ff61f',t:'MTc2NTI0Mjc4OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0ab69243af61f',t:'MTc2NTI0MzExNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
