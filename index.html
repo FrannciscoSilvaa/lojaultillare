@@ -472,8 +472,8 @@
       e.preventDefault();
       const senha = els.senhaAdminInicial.value;
       
-      if (senha === SENHA_ADMIN) {
-        tipoUsuario = 'admin';
+      if (senha === CONFIG.SENHA_ADMIN) {
+        state.tipoUsuario = 'admin';
         els.msgSenhaAdminInicial.textContent = '✅ Acesso autorizado!';
         els.msgSenhaAdminInicial.className = 'texto-elegante text-sm text-center mt-3 text-green-600';
         
@@ -515,7 +515,7 @@
       } else if (aba === 'vendas') {
         els.abaVendas.style.display = 'block';
         // Admin vê apenas resumo e histórico (sem PDV)
-        if (tipoUsuario === 'admin') {
+        if (state.tipoUsuario === 'admin') {
           els.pdvSection.style.display = 'none';
           els.resumoMesSection.style.display = 'block';
           els.historicoVendasSection.style.display = 'block';
@@ -535,13 +535,13 @@
     }
 
     function atualizarVisibilidadeAbas() {
-      if (tipoUsuario === 'admin') {
+      if (state.tipoUsuario === 'admin') {
         // Admin: Produtos, Vendas (histórico), Caixa, Controle
         els.btnAbaProdutos.style.display = 'inline-block';
         els.btnAbaVendas.style.display = 'inline-block';
         els.btnAbaCaixa.style.display = 'inline-block';
         els.btnAbaControle.style.display = 'inline-block';
-      } else if (tipoUsuario === 'funcionaria') {
+      } else if (state.tipoUsuario === 'funcionaria') {
         // Funcionária: Apenas Vendas (PDV)
         els.btnAbaProdutos.style.display = 'none';
         els.btnAbaVendas.style.display = 'inline-block';
@@ -648,7 +648,7 @@
             <div>
               <p class="texto-elegante text-sm font-semibold text-gray-900">${item.nome_produto}</p>
               <p class="texto-elegante text-xs text-gray-600">${item.categoria || 'Sem categoria'} • Estoque: ${item.quantidade} un</p>
-              <p class="texto-elegante text-xs text-gray-500 mt-1">Compra: ${formatMoney(item.preco_compra)} • Venda: ${formatMoney(item.preco_venda)}</p>
+              <p class="texto-elegante text-xs text-gray-500 mt-1">Compra: ${utils.formatMoney(item.preco_compra)} • Venda: ${utils.formatMoney(item.preco_venda)}</p>
             </div>
             <span class="texto-elegante text-xs font-medium text-green-600">+${margemPercent}%</span>
           </div>
@@ -675,7 +675,7 @@
         
         div.innerHTML = `
           <p class="texto-elegante text-xs font-medium text-gray-900">${item.nome_produto}</p>
-          <p class="texto-elegante text-xs text-gray-600">${formatMoney(item.preco_venda)} • Estoque: ${item.quantidade}</p>
+          <p class="texto-elegante text-xs text-gray-600">${utils.formatMoney(item.preco_venda)} • Estoque: ${item.quantidade}</p>
         `;
 
         div.addEventListener('click', () => {
@@ -689,7 +689,7 @@
 
     // ========== BUSCAR PRODUTO ==========
     function buscarProdutoPorNome(termo) {
-      const produtos = currentRecords.filter(r => r.tipo_registro === 'compra');
+      const produtos = state.currentRecords.filter(r => r.tipo_registro === 'compra');
       const termoLower = termo.toLowerCase().trim();
       
       const encontrado = produtos.find(p => 
@@ -702,14 +702,14 @@
           els.msgBusca.textContent = '⚠️ Produto sem estoque disponível';
           els.msgBusca.className = 'texto-elegante text-xs mt-2 text-yellow-600';
           els.resultadoBusca.style.display = 'none';
-          produtoSelecionado = null;
+          state.produtoSelecionado = null;
           return;
         }
 
-        produtoSelecionado = encontrado;
+        state.produtoSelecionado = encontrado;
         els.produtoNome.textContent = encontrado.nome_produto;
         els.produtoInfo.textContent = `${encontrado.categoria || 'Sem categoria'} • Estoque: ${encontrado.quantidade} un`;
-        els.produtoPreco.textContent = formatMoney(encontrado.preco_venda);
+        els.produtoPreco.textContent = utils.formatMoney(encontrado.preco_venda);
         els.qtdVenda.value = 1;
         els.qtdVenda.max = encontrado.quantidade;
         els.resultadoBusca.style.display = 'block';
@@ -719,7 +719,7 @@
         els.msgBusca.textContent = '❌ Produto não encontrado';
         els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
         els.resultadoBusca.style.display = 'none';
-        produtoSelecionado = null;
+        state.produtoSelecionado = null;
       }
     }
 
@@ -734,31 +734,29 @@
     // ========== CARRINHO ==========
     function calcularTotais() {
       let desconto = 0;
-      let totalFinal = subtotalCarrinho;
+      let totalFinal = state.subtotalCarrinho;
 
       return { desconto, totalFinal };
     }
 
     function atualizarCarrinho() {
-      if (carrinho.length === 0) {
+      if (state.carrinho.length === 0) {
         els.carrinhoItens.innerHTML = '<p id="carrinho-vazio" class="texto-elegante text-sm text-gray-400">Carrinho vazio</p>';
         els.btnFinalizarVenda.disabled = true;
-        els.carrinhoSubtotal.textContent = 'R$ 0,00';
         els.carrinhoTotalFinal.textContent = 'R$ 0,00';
         els.carrinhoTotalItens.textContent = '0';
         els.formaPagamentoSection.style.display = 'none';
-        els.descontoInfo.style.display = 'none';
-        formaPagamentoSelecionada = null;
+        state.formaPagamentoSelecionada = null;
         return;
       }
 
       els.carrinhoItens.innerHTML = '';
-      subtotalCarrinho = 0;
+      state.subtotalCarrinho = 0;
       let totalItens = 0;
 
-      carrinho.forEach((item, index) => {
+      state.carrinho.forEach((item, index) => {
         const valorTotal = item.preco_venda * item.quantidade;
-        subtotalCarrinho += valorTotal;
+        state.subtotalCarrinho += valorTotal;
         totalItens += item.quantidade;
 
         const div = document.createElement('div');
@@ -768,18 +766,18 @@
           <div class="flex justify-between items-start mb-2">
             <div class="flex-1">
               <p class="texto-elegante text-white text-sm font-medium">${item.nome_produto}</p>
-              <p class="texto-elegante text-gray-400 text-xs">${item.quantidade} un × ${formatMoney(item.preco_venda)}</p>
+              <p class="texto-elegante text-gray-400 text-xs">${item.quantidade} un × ${utils.formatMoney(item.preco_venda)}</p>
             </div>
             <button class="texto-elegante text-red-400 hover:text-red-300 text-xs font-medium" data-index="${index}">
               🗑️ Remover
             </button>
           </div>
-          <p class="texto-elegante text-green-400 text-sm font-bold">${formatMoney(valorTotal)}</p>
+          <p class="texto-elegante text-green-400 text-sm font-bold">${utils.formatMoney(valorTotal)}</p>
         `;
 
         const btnRemover = div.querySelector('button');
         btnRemover.addEventListener('click', () => {
-          carrinho.splice(index, 1);
+          state.carrinho.splice(index, 1);
           atualizarCarrinho();
         });
         
@@ -791,28 +789,28 @@
 
       const { totalFinal } = calcularTotais();
 
-      els.carrinhoTotalFinal.textContent = formatMoney(totalFinal);
-      els.btnFinalizarVenda.disabled = !formaPagamentoSelecionada;
+      els.carrinhoTotalFinal.textContent = utils.formatMoney(totalFinal);
+      els.btnFinalizarVenda.disabled = !state.formaPagamentoSelecionada;
     }
 
     els.btnAdicionarCarrinho.addEventListener('click', () => {
-      if (!produtoSelecionado) return;
+      if (!state.produtoSelecionado) return;
 
       const qtd = parseInt(els.qtdVenda.value) || 1;
 
-      if (qtd > produtoSelecionado.quantidade) {
+      if (qtd > state.produtoSelecionado.quantidade) {
         els.msgBusca.textContent = '⚠️ Quantidade maior que o estoque';
         els.msgBusca.className = 'texto-elegante text-xs mt-2 text-red-600';
         return;
       }
 
-      const itemExistente = carrinho.find(i => i.nome_produto === produtoSelecionado.nome_produto);
+      const itemExistente = state.carrinho.find(i => i.nome_produto === state.produtoSelecionado.nome_produto);
 
       if (itemExistente) {
         itemExistente.quantidade += qtd;
       } else {
-        carrinho.push({
-          ...produtoSelecionado,
+        state.carrinho.push({
+          ...state.produtoSelecionado,
           quantidade: qtd
         });
       }
@@ -822,7 +820,7 @@
       els.buscarProduto.value = '';
       els.msgBusca.textContent = '✅ Produto adicionado ao carrinho!';
       els.msgBusca.className = 'texto-elegante text-xs mt-2 text-green-600';
-      produtoSelecionado = null;
+      state.produtoSelecionado = null;
 
       setTimeout(() => {
         els.msgBusca.textContent = '';
@@ -833,7 +831,7 @@
     document.querySelectorAll('.forma-pagamento-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const forma = btn.dataset.forma;
-        formaPagamentoSelecionada = forma;
+        state.formaPagamentoSelecionada = forma;
 
         // Atualizar visual dos botões
         document.querySelectorAll('.forma-pagamento-btn').forEach(b => {
@@ -864,7 +862,7 @@
 
       if (valorPago >= totalFinal) {
         const troco = valorPago - totalFinal;
-        els.valorTroco.textContent = formatMoney(troco);
+        els.valorTroco.textContent = utils.formatMoney(troco);
         els.trocoInfo.style.display = 'block';
       } else {
         els.trocoInfo.style.display = 'none';
@@ -872,8 +870,8 @@
     });
 
     els.btnLimparCarrinho.addEventListener('click', () => {
-      carrinho = [];
-      formaPagamentoSelecionada = null;
+      state.carrinho = [];
+      state.formaPagamentoSelecionada = null;
       atualizarCarrinho();
       els.msgVenda.textContent = '🗑️ Carrinho limpo';
       els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-gray-400';
@@ -884,10 +882,10 @@
 
     // ========== FINALIZAR VENDA ==========
     els.btnFinalizarVenda.addEventListener('click', async () => {
-      if (!isDataSdkReady || carrinho.length === 0 || !formaPagamentoSelecionada) return;
+      if (!state.isDataSdkReady || state.carrinho.length === 0 || !state.formaPagamentoSelecionada) return;
 
       // Validar valor pago se for dinheiro
-      if (formaPagamentoSelecionada === 'dinheiro') {
+      if (state.formaPagamentoSelecionada === 'dinheiro') {
         const valorPago = parseFloat(els.valorPago.value) || 0;
         const { totalFinal } = calcularTotais();
         
@@ -905,7 +903,7 @@
       const { totalFinal } = calcularTotais();
 
       // Registrar cada item do carrinho como venda
-      for (const item of carrinho) {
+      for (const item of state.carrinho) {
         const venda = {
           tipo_registro: 'venda',
           nome_produto: item.nome_produto,
@@ -914,7 +912,7 @@
           preco_venda: item.preco_venda,
           quantidade: item.quantidade,
           data: new Date().toISOString(),
-          observacao: `Pagamento: ${formaPagamentoSelecionada.toUpperCase()}`,
+          observacao: `Pagamento: ${state.formaPagamentoSelecionada.toUpperCase()}`,
           created_at: new Date().toISOString()
         };
 
@@ -928,7 +926,7 @@
         }
 
         // Atualizar estoque do produto
-        const produtoOriginal = currentRecords.find(r => 
+        const produtoOriginal = state.currentRecords.find(r => 
           r.tipo_registro === 'compra' && 
           r.nome_produto === item.nome_produto
         );
@@ -946,19 +944,19 @@
 
       let mensagemSucesso = '✅ Venda finalizada com sucesso!';
       
-      if (formaPagamentoSelecionada === 'dinheiro') {
+      if (state.formaPagamentoSelecionada === 'dinheiro') {
         const valorPago = parseFloat(els.valorPago.value) || 0;
         const troco = valorPago - totalFinal;
         if (troco > 0) {
-          mensagemSucesso += ` Troco: ${formatMoney(troco)}`;
+          mensagemSucesso += ` Troco: ${utils.formatMoney(troco)}`;
         }
       }
 
       els.msgVenda.textContent = mensagemSucesso;
       els.msgVenda.className = 'texto-elegante text-sm text-center mt-3 text-green-400';
       
-      carrinho = [];
-      formaPagamentoSelecionada = null;
+      state.carrinho = [];
+      state.formaPagamentoSelecionada = null;
       atualizarCarrinho();
 
       setTimeout(() => {
@@ -992,9 +990,9 @@
         }
       });
 
-      els.totalCompras.textContent = formatMoney(totalCompras);
-      els.totalVendas.textContent = formatMoney(totalVendas);
-      els.lucroTotal.textContent = formatMoney(lucro);
+      els.totalCompras.textContent = utils.formatMoney(totalCompras);
+      els.totalVendas.textContent = utils.formatMoney(totalVendas);
+      els.lucroTotal.textContent = utils.formatMoney(lucro);
     }
 
     // ========== ATUALIZAR LISTA REGISTROS (VENDAS) ==========
@@ -1028,11 +1026,11 @@
               <span>⬇️</span>
               <div>
                 <p class="texto-elegante text-sm font-semibold text-gray-900">${item.nome_produto}</p>
-                <p class="texto-elegante text-xs text-gray-600">${item.quantidade} un • ${formatDate(item.data)}</p>
-                <p class="texto-elegante text-xs text-green-600">Lucro: ${formatMoney(lucro)}</p>
+                <p class="texto-elegante text-xs text-gray-600">${item.quantidade} un • ${utils.formatDate(item.data)}</p>
+                <p class="texto-elegante text-xs text-green-600">Lucro: ${utils.formatMoney(lucro)}</p>
               </div>
             </div>
-            <span class="texto-elegante text-sm font-bold text-green-600">${formatMoney(valor)}</span>
+            <span class="texto-elegante text-sm font-bold text-green-600">${utils.formatMoney(valor)}</span>
           </div>
         `;
         
@@ -1045,7 +1043,7 @@
       const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
 
-      const vendasHoje = currentRecords.filter(r => {
+      const vendasHoje = state.currentRecords.filter(r => {
         if (r.tipo_registro !== 'venda') return false;
         const dataVenda = new Date(r.data);
         dataVenda.setHours(0, 0, 0, 0);
@@ -1060,11 +1058,11 @@
         totalLucro += (v.preco_venda - v.preco_compra) * v.quantidade;
       });
 
-      els.vendasHoje.textContent = formatMoney(totalVendas);
+      els.vendasHoje.textContent = utils.formatMoney(totalVendas);
       els.qtdVendasHoje.textContent = `${vendasHoje.length} ${vendasHoje.length === 1 ? 'venda' : 'vendas'}`;
-      els.lucroHoje.textContent = formatMoney(totalLucro);
+      els.lucroHoje.textContent = utils.formatMoney(totalLucro);
 
-      const fechamentos = currentRecords.filter(r => r.tipo_registro === 'fechamento');
+      const fechamentos = state.currentRecords.filter(r => r.tipo_registro === 'fechamento');
       
       if (fechamentos.length === 0) {
         els.listaFechamentos.innerHTML = '<p id="sem-fechamentos" class="texto-elegante text-sm text-gray-400">Nenhum fechamento registrado.</p>';
@@ -1086,12 +1084,12 @@
         div.innerHTML = `
           <div class="flex justify-between items-start">
             <div>
-              <p class="texto-elegante text-white font-semibold text-sm">📅 ${formatDate(f.data)}</p>
+              <p class="texto-elegante text-white font-semibold text-sm">📅 ${utils.formatDate(f.data)}</p>
               <p class="texto-elegante text-gray-400 text-xs">${f.observacao}</p>
             </div>
             <div class="text-right">
-              <p class="texto-elegante text-green-400 font-bold text-sm">${formatMoney(f.preco_venda)}</p>
-              <p class="texto-elegante text-blue-400 text-xs">Lucro: ${formatMoney(f.preco_compra)}</p>
+              <p class="texto-elegante text-green-400 font-bold text-sm">${utils.formatMoney(f.preco_venda)}</p>
+              <p class="texto-elegante text-blue-400 text-xs">Lucro: ${utils.formatMoney(f.preco_compra)}</p>
             </div>
           </div>
         `;
@@ -1102,7 +1100,7 @@
 
     // ========== ATUALIZAR CONTROLE MENSAL ==========
     function atualizarControle() {
-      const vendas = currentRecords.filter(r => r.tipo_registro === 'venda');
+      const vendas = state.currentRecords.filter(r => r.tipo_registro === 'venda');
       
       if (vendas.length === 0) {
         els.listaMeses.innerHTML = '<p id="sem-dados-controle" class="texto-elegante text-sm text-gray-400">Nenhum dado disponível ainda.</p>';
@@ -1182,11 +1180,11 @@
           <div class="grid grid-cols-2 gap-3 mb-4">
             <div class="bg-white rounded-xl p-4 border border-green-200">
               <p class="texto-elegante text-xs text-gray-600 mb-1">💰 Total de Vendas</p>
-              <p class="texto-elegante text-2xl font-bold text-green-600">${formatMoney(dados.totalVendas)}</p>
+              <p class="texto-elegante text-2xl font-bold text-green-600">${utils.formatMoney(dados.totalVendas)}</p>
             </div>
             <div class="bg-white rounded-xl p-4 border border-blue-200">
               <p class="texto-elegante text-xs text-gray-600 mb-1">📈 Lucro Total</p>
-              <p class="texto-elegante text-2xl font-bold text-blue-600">${formatMoney(dados.totalLucro)}</p>
+              <p class="texto-elegante text-2xl font-bold text-blue-600">${utils.formatMoney(dados.totalLucro)}</p>
             </div>
           </div>
 
@@ -1194,12 +1192,12 @@
             <div class="bg-white rounded-xl p-3 border border-yellow-200">
               <p class="texto-elegante text-xs text-gray-600 mb-1">🏆 Mais Vendido</p>
               <p class="texto-elegante text-sm font-bold text-gray-900">${maisVendido.nome}</p>
-              <p class="texto-elegante text-xs text-gray-600">${maisVendido.quantidade} unidades • ${formatMoney(maisVendido.valor)}</p>
+              <p class="texto-elegante text-xs text-gray-600">${maisVendido.quantidade} unidades • ${utils.formatMoney(maisVendido.valor)}</p>
             </div>
             <div class="bg-white rounded-xl p-3 border border-gray-200">
               <p class="texto-elegante text-xs text-gray-600 mb-1">📉 Menos Vendido</p>
               <p class="texto-elegante text-sm font-bold text-gray-900">${menosVendido.nome}</p>
-              <p class="texto-elegante text-xs text-gray-600">${menosVendido.quantidade} unidades • ${formatMoney(menosVendido.valor)}</p>
+              <p class="texto-elegante text-xs text-gray-600">${menosVendido.quantidade} unidades • ${utils.formatMoney(menosVendido.valor)}</p>
             </div>
           </div>
         `;
@@ -1210,12 +1208,12 @@
 
     // ========== FECHAR CAIXA ==========
     els.btnFecharCaixa.addEventListener('click', async () => {
-      if (!isDataSdkReady) return;
+      if (!state.isDataSdkReady) return;
 
       const hoje = new Date();
       hoje.setHours(0, 0, 0, 0);
 
-      const vendasHoje = currentRecords.filter(r => {
+      const vendasHoje = state.currentRecords.filter(r => {
         if (r.tipo_registro !== 'venda') return false;
         const dataVenda = new Date(r.data);
         dataVenda.setHours(0, 0, 0, 0);
@@ -1271,11 +1269,11 @@
     // ========== DATA SDK ==========
     const dataHandler = {
       onDataChanged(data) {
-        currentRecords = data || [];
-        atualizarResumo(currentRecords);
-        atualizarRegistros(currentRecords);
-        atualizarProdutos(currentRecords);
-        atualizarProdutosPdv(currentRecords);
+        state.currentRecords = data || [];
+        atualizarResumo(state.currentRecords);
+        atualizarRegistros(state.currentRecords);
+        atualizarProdutos(state.currentRecords);
+        atualizarProdutosPdv(state.currentRecords);
         if (els.abaCaixa.style.display !== 'none') {
           atualizarCaixa();
         }
@@ -1287,7 +1285,7 @@
 
       const result = await window.dataSdk.init(dataHandler);
       if (result.isOk) {
-        isDataSdkReady = true;
+        state.isDataSdkReady = true;
       }
     })();
 
@@ -1335,5 +1333,5 @@
       applyConfig(window.elementSdk.config || defaultConfig);
     })();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab080fdb6fcf630',t:'MTc2NTI0MTM3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab0940c07cdf61f',t:'MTc2NTI0MjE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
